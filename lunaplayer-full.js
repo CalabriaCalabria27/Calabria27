@@ -456,7 +456,7 @@ if (w.metadatatechnic === "corsproxy") {
                 dataType: "text",
                 method: "GET",
                 crossDomain: !0,
-                url: "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/dzsuinmlh3mtv" + zn + "/now_playing/",
+                url: https://zenoplay.zenomedia.com/api/zenofm/nowplaying/"+idzeno+"/?rand="+ Math.random();
                 success: function(b) {
                     try {
                         var a = JSON.parse(b);
