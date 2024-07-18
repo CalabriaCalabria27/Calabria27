@@ -1,7 +1,7 @@
-const RADIO_NAME = 'RadioCalabria27';
+const RADIO_NAME = '♫ RadioCalabria27 ♪';
 
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
-const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv';
+const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv?zs=_stPb8aHTierJGc8qTL45Q&adtonosListenerId=01HJHF3KX3088GJC32AC8RFYFG';
 
 // You can find the mount point in the Broadcast Settings.
 // To generate the Zeno Radio API link from the mount point,
