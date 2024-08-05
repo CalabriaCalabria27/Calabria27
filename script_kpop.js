@@ -3,7 +3,11 @@ const RADIO_NAME = 'Radio Conexion Urban';
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
 const URL_STREAMING = 'https://stream.zeno.fm/dzsuinmlh3mtv';
 
-var TYPE_API ='DEEZER'; //selecciona entre itunes , deezer o spotify xd
+// You can find the mount point in the Broadcast Settings.
+// To generate the Zeno Radio API link from the mount point,
+// exclude the '/source' part and append the remaining mount point to the base URL of the API.
+// For example, if the mount point is 'ssk8vnnpcwzuv/source',
+// the API link will be 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv'.
 
 //API URL /
 const url = 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv';
