@@ -7,7 +7,7 @@ const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv';
 // To generate the Zeno Radio API link from the mount point,
 // exclude the '/source' part and append the remaining mount point to the base URL of the API.
 // For example, if the mount point is 'ssk8vnnpcwzuv/source',
-// the API link will be 'https://api.zeno.fm/mounts/metadata/subscribe/ssk8vnnpcwzuv'.
+// the API link will be 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv'.
 
 const url = 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv';
 
