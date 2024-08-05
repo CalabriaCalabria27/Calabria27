@@ -14,29 +14,88 @@ const url = 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv';
 // Visit https://api.vagalume.com.br/docs/ to get your API key
 const API_KEY = "18fe07917957c289983464588aabddfb";
 
-// Variable to control history display: true = display / false = hides
-let showHistory = true; 
+let userInteracted = true;
 
-window.onload = function () {
-    var page = new Page;
+// Cache para la API 
+const cache = {};
+
+
+const getDataFromConexionKpop = async (artist, title, defaultArt, defaultCover) => {
+    let text;
+    if (artist === title) {
+            text = `${title}`;
+    } else {
+            text = `${artist} - ${title}`;
+    }
+    const cacheKey = text.toLowerCase();
+    if (cache[cacheKey]) {
+            return cache[cacheKey];
+    }
+
+    
+    const response = await fetch(`https://apikpop.conexionkpop.com/buscador.php?query=${encodeURIComponent(text)}&service=` + TYPE_API.toLowerCase());
+    if (response.status === 403) {
+            const results = {
+                    title,
+                    artist,
+                    art: defaultArt,
+                    cover: defaultCover,
+                    stream_url: "#not-found",
+            };
+            
+            return results;
+    }
+    const data = response.ok ? await response.json() : {};
+    if (!data.results || data.results.length === 0) {
+            const results = {
+                    title,
+                    artist,
+                    art: defaultArt,
+                    cover: defaultCover,
+                    stream_url: "#not-found",
+            };
+            
+            return results;
+    }
+    const stream = data.results;
+    const results = {
+            title: title,
+            artist: artist,
+            thumbnail: stream.artwork.medium || defaultArt,
+            art: stream.artwork.medium || defaultArt,
+            cover: stream.artwork.medium || defaultCover,
+            stream_url: "#not-found",
+    };
+    cache[cacheKey] = results;
+    return results;
+};
+
+
+
+
+
+window.addEventListener('load', () => { 
+    const page = new Page();
     page.changeTitlePage();
     page.setVolume();
 
-    var player = new Player();
+    const player = new Player();
     player.play();
 
+    
     getStreamingData();
-    // Interval to get streaming data in miliseconds
-    setInterval(function () {
-        getStreamingData();
-    }, 10000);
 
-    var coverArt = document.getElementsByClassName('cover-album')[0];
+    
+    const streamingInterval = setInterval(getStreamingData, 10000);
 
-    coverArt.style.height = coverArt.offsetWidth + 'px';
-
-    localStorage.removeItem('musicHistory');
-}
+    
+    const coverArt = document.querySelector('.cover-album'); 
+    if (coverArt) { 
+      coverArt.style.height = `${coverArt.offsetWidth}px`;
+    } else {
+      console.warn("Elemento .cover-album no encontrado.");
+    }
+});
 
 // DOM control
 class Page {
@@ -45,90 +104,198 @@ class Page {
             document.title = title;
         };
 
-        this.refreshCurrentSong = function (song, artist) {
-            var currentSong = document.getElementById('currentSong');
-            var currentArtist = document.getElementById('currentArtist');
-
-            if (song !== currentSong.innerHTML) {
-                // Animate transition
-                currentSong.className = 'animated flipInY text-uppercase';
-                currentSong.innerHTML = song;
-
-                currentArtist.className = 'animated flipInY text-capitalize';
-                currentArtist.innerHTML = artist;
-
-                // Refresh modal title
-                document.getElementById('lyricsSong').innerHTML = song + ' - ' + artist;
-
-                // Remove animation classes
-                setTimeout(function () {
-                    currentSong.className = 'text-uppercase';
-                    currentArtist.className = 'text-capitalize';
-                }, 2000);
+        this.refreshCurrentSong = function(song, artist) {
+            const currentSong = document.getElementById('currentSong');
+            const currentArtist = document.getElementById('currentArtist');
+            const lyricsSong = document.getElementById('lyricsSong');
+        
+            if (song !== currentSong.textContent || artist !== currentArtist.textContent) { 
+               
+                currentSong.classList.add('fade-out');
+                currentArtist.classList.add('fade-out');
+        
+                setTimeout(function() {
+                    
+                    currentSong.textContent = song; 
+                    currentArtist.textContent = artist;
+                    lyricsSong.textContent = song + ' - ' + artist;
+        
+                    
+                    currentSong.classList.remove('fade-out');
+                    currentSong.classList.add('fade-in');
+                    currentArtist.classList.remove('fade-out');
+                    currentArtist.classList.add('fade-in');
+                }, 500); 
+        
+                setTimeout(function() {
+                    
+                    currentSong.classList.remove('fade-in');
+                    currentArtist.classList.remove('fade-in');
+                }, 1000); 
             }
         };
-
-        // Função para atualizar a capa
-        this.refreshCover = function (song = '', artist) {
-            // Default cover art
-            var urlCoverArt = 'img/cover.png';
-
-            // Criação da tag de script para fazer a requisição JSONP à API do Deezer
-            const script = document.createElement('script');
-            script.src = `https://api.deezer.com/search?q=${artist} ${song}&output=jsonp&callback=handleDeezerResponse`;
-            document.body.appendChild(script);
-        };
-
-
-        this.changeVolumeIndicator = function (volume) {
-            document.getElementById('volIndicator').innerHTML = volume;
-
-            if (typeof (Storage) !== 'undefined') {
-                localStorage.setItem('volume', volume);
+          
+        this.refreshHistoric = async function (info, n) {
+            const historicDiv = document.querySelectorAll('#historicSong article')[n];
+            const songName = document.querySelectorAll('#historicSong article .music-info .song')[n];
+            const artistName = document.querySelectorAll('#historicSong article .music-info .artist')[n];
+            const coverHistoric = document.querySelectorAll('#historicSong article .cover-historic')[n];
+            
+            const defaultCoverArt = "https://xatimg.com/image/EQZDhRdtBZFX.png"; //imagen default
+            //const defaultArt = 'img/logan.png';
+            
+            const music = info.song.replace(/'/g, '\'').replace(/&/g, '&');
+            const artist = info.artist.replace(/'/g, '\'').replace(/&/g, '&');
+          
+            songName.innerHTML = music;
+            artistName.innerHTML = artist;
+        
+            try {
+                const data = await getDataFromConexionKpop(artist, music, defaultCoverArt);
+        
+                
+                coverHistoric.style.backgroundImage = 'url(' + (data.art || defaultCoverArt) + ')';
+            } catch (error) {
+                console.error("Error al obtener datos de la API :", error);
+                coverHistoric.style.backgroundImage = 'url(' + defaultCoverArt + ')';
             }
+        
+            
+            historicDiv.classList.add('animated', 'slideInRight');
+            setTimeout(() => historicDiv.classList.remove('animated', 'slideInRight'), 2000); 
         };
-
-        this.setVolume = function () {
-            if (typeof (Storage) !== 'undefined') {
-                var volumeLocalStorage = (!localStorage.getItem('volume')) ? 95 : localStorage.getItem('volume');
-                document.getElementById('volume').value = volumeLocalStorage;
-                document.getElementById('volIndicator').innerHTML = volumeLocalStorage;
-            }
-        };
-
-        this.refreshLyric = function (currentSong, currentArtist) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    var data = JSON.parse(this.responseText);
-
-                    var openLyric = document.getElementsByClassName('lyrics')[0];
-
-                    if (data.type === 'exact' || data.type === 'aprox') {
-                        var lyric = data.mus[0].text;
-
-                        document.getElementById('lyric').innerHTML = lyric.replace(/\n/g, '<br />');
-                        openLyric.style.opacity = "1";
-                        openLyric.setAttribute('data-toggle', 'modal');
-                    } else {
-                        openLyric.style.opacity = "0.3";
-                        openLyric.removeAttribute('data-toggle');
-
-                        var modalLyric = document.getElementById('modalLyrics');
-                        modalLyric.style.display = "none";
-                        modalLyric.setAttribute('aria-hidden', 'true');
-                        (document.getElementsByClassName('modal-backdrop')[0]) ? document.getElementsByClassName('modal-backdrop')[0].remove() : '';
-                    }
-                } else {
-                    document.getElementsByClassName('lyrics')[0].style.opacity = "0.3";
-                    document.getElementsByClassName('lyrics')[0].removeAttribute('data-toggle');
+        
+        this.refreshCover = async function (song = '', artist) {
+            const coverArt = document.getElementById('currentCoverArt');
+            const coverBackground = document.getElementById('bgCover');
+            const defaultCoverArt = "https://xatimg.com/image/EQZDhRdtBZFX.png"; // imagen default
+        
+            try {
+                const data = await getDataFromConexionKpop(artist, song, defaultCoverArt);
+        
+                
+                coverArt.style.backgroundImage = 'url(' + data.art + ')';
+                coverBackground.style.backgroundImage = 'url(' + data.cover + ')';
+        
+                
+                coverArt.classList.add('animated', 'bounceInLeft');
+                setTimeout(() => coverArt.classList.remove('animated', 'bounceInLeft'), 2000);
+              
+                
+                if ('mediaSession' in navigator) {
+                    const artwork = [
+                        { src: data.art, sizes: '96x96',   type: 'image/png' },
+                        { src: data.art, sizes: '128x128', type: 'image/png' },
+                        { src: data.art, sizes: '192x192', type: 'image/png' },
+                        { src: data.art, sizes: '256x256', type: 'image/png' },
+                        { src: data.art, sizes: '384x384', type: 'image/png' },
+                        { src: data.art, sizes: '512x512', type: 'image/png' },
+                    ];
+                
+                    navigator.mediaSession.metadata = new MediaMetadata({ 
+                        title: song, 
+                        artist: artist, 
+                        artwork 
+                    });
                 }
-            };
-            xhttp.open('GET', 'https://api.vagalume.com.br/search.php?apikey=' + API_KEY + '&art=' + currentArtist + '&mus=' + currentSong.toLowerCase(), true);
-            xhttp.send();
+            } catch (error) {
+                console.error("Error al obtener datos de la API ", error);
+                
+            }
+        };
+
+        this.changeVolumeIndicator = function(volume) {
+            document.getElementById('volIndicator').textContent = volume; 
+          
+            if (typeof Storage !== 'undefined') {
+              localStorage.setItem('volume', volume);
+            }
+          };
+          
+        this.setVolume = function() {
+            if (typeof Storage !== 'undefined') {
+              const volumeLocalStorage = localStorage.getItem('volume') || 80; 
+          
+              document.getElementById('volume').value = volumeLocalStorage;
+              document.getElementById('volIndicator').textContent = volumeLocalStorage;
+            }
+          };
+
+        this.refreshLyric = async function (currentSong, currentArtist) {
+            const openLyric = document.getElementsByClassName('lyrics')[0];
+            const modalLyric = document.getElementById('modalLyrics');
+            
+            try {
+              const response = await fetch('https://api.vagalume.com.br/search.php?apikey=' + API_KEY + '&art=' + currentArtist + '&mus=' + currentSong.toLowerCase());
+              const data = await response.json();
+          
+              if (data.type === 'exact' || data.type === 'aprox') {
+                const lyric = data.mus[0].text;
+          
+                
+                document.getElementById('lyric').innerHTML = lyric.replace(/\n/g, '<br />');
+                openLyric.style.opacity = "1";
+                openLyric.setAttribute('data-toggle', 'modal');
+          
+               
+                modalLyric.style.display = "none";
+                modalLyric.setAttribute('aria-hidden', 'true');
+                if (document.getElementsByClassName('modal-backdrop')[0]) {
+                  document.getElementsByClassName('modal-backdrop')[0].remove();
+                }
+              } else {
+                openLyric.style.opacity = "0.3";
+                openLyric.removeAttribute('data-toggle');
+              }
+            } catch (error) {
+              console.error("Error al buscar letras de canciones:", error);
+              openLyric.style.opacity = "0.3";
+              openLyric.removeAttribute('data-toggle');
+            }
         };
     }
 }
+
+
+async function getStreamingData() {
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud de API: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (data.length === 0) {
+      console.log('%cdebug', 'font-size: 22px'); 
+    } else {
+      const page = new Page();
+
+     
+      const currentSong = data.currentSong.replace(/'/g, '\'').replace(/&/g, '&');
+      const currentArtist = data.currentArtist.replace(/'/g, '\'').replace(/&/g, '&');
+
+      
+      document.title = currentSong + ' - ' + currentArtist + ' | ' + RADIO_NAME;
+
+      if (document.getElementById('currentSong').innerHTML !== currentSong) {
+        page.refreshCover(currentSong, currentArtist);
+        page.refreshCurrentSong(currentSong, currentArtist);
+        page.refreshLyric(currentSong, currentArtist);
+
+        
+        for (let i = 0; i < data.songHistory.length; i++) {
+          page.refreshHistoric(data.songHistory[i], i);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error al obtener datos de transmisiÃ³n:", error);
+    //alert("Ocorreu um erro ao buscar informaÃ§Ãµes da mÃºsica. Por favor, tente novamente mais tarde."); 
+  }
+}
+
 
 // Variável global para armazenar as músicas
 var audio = new Audio(URL_STREAMING);
