@@ -169,6 +169,13 @@ audio.onplay = function () {
     }
 }
 
+// Unmute when volume changed
+audio.onvolumechange = function () {
+    if (audio.volume > 0) {
+        audio.muted = false;
+    }
+}
+
 // On pause, change the button to play
 audio.onpause = function () {
     var botao = document.getElementById('playerButton');
