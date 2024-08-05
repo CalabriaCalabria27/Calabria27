@@ -6,7 +6,7 @@ const URL_STREAMING = 'https://stream.zeno.fm/dzsuinmlh3mtv';
 var TYPE_API ='DEEZER'; //selecciona entre itunes , deezer o spotify xd
 
 //API URL /
-const API_URL = 'https://apikpop.conexionkpop.com/api_v4.php?url='+URL_STREAMING
+const API_URL =https://status.rcast.net/69407 ?url='+URL_STREAMING
 
 // Visit https://api.vagalume.com.br/docs/ to get your API key
 const API_KEY = "18fe07917957c289983464588aabddfb";
