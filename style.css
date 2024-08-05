@@ -19,7 +19,7 @@ body {
     min-width: 100%;
     min-height: 100%;
     position: fixed;
-    background: url('https://i.postimg.cc/vHXHT4Tj/dddd.png') no-repeat;
+    background: url('https://i.postimg.cc/DfMCqT0z/ii.png') no-repeat;
     background-position: center;
     background-size: cover;
     transition: background-image 1s;
@@ -63,7 +63,7 @@ body {
 .cover-album {
     max-width: 80%;
     margin: auto;
-    background: url('https://i.postimg.cc/vHXHT4Tj/dddd.png') no-repeat;
+    background: url('https://i.postimg.cc/DfMCqT0z/ii.png') no-repeat;
     background-size: cover;
     border: 2px solid #fefefe;
     box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, 0.4);
@@ -315,7 +315,7 @@ input[type=range]::-ms-thumb {
     margin-right: 15px;
     float: left;
     border-radius: 10px;
-    background: url('https://xatimg.com/image/EQZDhRdtBZFX.png') no-repeat;
+    background: url('https://i.postimg.cc/tCDmYx6L/ssss.png') no-repeat;
     background-size: cover;
     border: 2px solid #fefefe;
    
