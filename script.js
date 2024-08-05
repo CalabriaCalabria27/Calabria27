@@ -1,15 +1,15 @@
-const RADIO_NAME = '♫ RadioCalabria27 ♪';
+const RADIO_NAME = 'RadioCalabria27';
 
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
-const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv';
+const URL_STREAMING = 'https://stream.zeno.fm/dzsuinmlh3mtv';
 
-// You can find the mount point in the Broadcast Settings.
-// To generate the Zeno Radio API link from the mount point,
-// exclude the '/source' part and append the remaining mount point to the base URL of the API.
-// For example, if the mount point is 'yn65fsaurfhvv/source',
-// the API link will be 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv'.
+var TYPE_API ='DEEZER'; //selecciona entre itunes , deezer o spotify xd
 
-const url = 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv';
+//API URL /
+const API_URL = 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv?url='+URL_STREAMING
+
+// Visit https://api.vagalume.com.br/docs/ to get your API key
+const API_KEY = "18fe07917957c289983464588aabddfb";
 
 // Visit https://api.vagalume.com.br/docs/ to get your API key
 const API_KEY = "18fe07917957c289983464588aabddfb";
