@@ -255,7 +255,6 @@ class Page {
     }
 }
 
-
 async function getStreamingData() {
   try {
     const response = await fetch(API_URL);
@@ -290,8 +289,8 @@ async function getStreamingData() {
       }
     }
   } catch (error) {
-    console.error("Error al obtener datos de transmisión:", error);
-    //alert("Ocorreu um erro ao buscar informações da música. Por favor, tente novamente mais tarde."); 
+    console.error("Error al obtener datos de transmisiÃ³n:", error);
+    //alert("Ocorreu um erro ao buscar informaÃ§Ãµes da mÃºsica. Por favor, tente novamente mais tarde."); 
   }
 }
 
@@ -320,7 +319,7 @@ class Player {
             }
             document.getElementById('volIndicator').innerHTML = defaultVolume;
             
-            togglePlay(); // Adiciona esta linha para atualizar o botão
+            togglePlay(); // Adiciona esta linha para atualizar o botÃ£o
         };
 
         this.pause = function () {
@@ -357,7 +356,7 @@ audio.onvolumechange = function () {
 }
 
 audio.onerror = function () {
-    var confirmacao = confirm('Transmisión inactiva/Error de red. \nHaga clic en Aceptar para intentarlo de nuevo.');
+    var confirmacao = confirm('TransmisiÃ³n inactiva/Error de red. \nHaga clic en Aceptar para intentarlo de nuevo.');
 
     if (confirmacao) {
         window.location.reload();
@@ -483,4 +482,3 @@ function intToDecimal(vol) {
 function decimalToInt(vol) {
     return vol * 100;
 }
-
