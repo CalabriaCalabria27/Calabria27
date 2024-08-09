@@ -13,7 +13,7 @@ const url = 'https://api.zeno.fm/mounts/metadata/subscribe/dzsuinmlh3mtv';
 // Visit https://api.vagalume.com.br/docs/ to get your API key
 const API_KEY = "18fe07917957c289983464588aabddfb";
 
-let userInteracted = false;
+let userInteracted = true;
 
 // Cache para la API 
 const cache = {};
