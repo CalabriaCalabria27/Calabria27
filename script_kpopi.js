@@ -1,4 +1,4 @@
-const RADIO_NAME = '♫ Jesus es Dios de Poder ♪';
+const RADIO_NAME = 'RadioCalabria27';
 
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
 const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNTIuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6IldybDhqNWs0UmUtMGVZWHFLanN0dGciLCJpYXQiOjE3MjM0MjAwMzQsImV4cCI6MTcyMzQyMDA5NH0.qlo1BC3TRloUQmBvsODszz_OcVS2Zh9SzZi3GDQfXEM';
