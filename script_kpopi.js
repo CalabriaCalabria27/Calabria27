@@ -5,7 +5,6 @@ const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIU
 
 var TYPE_API ='SPOTIFY'; //selecciona entre itunes , deezer o spotify xd
 
-
 //API URL /
 const API_URL = 'https://apikpop.conexionkpop.com/api_v4.php?url='+URL_STREAMING
 
