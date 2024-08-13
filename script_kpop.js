@@ -1,4 +1,4 @@
-const RADIO_NAME = 'RadioCalabri27';
+const RADIO_NAME = 'RadioCalabria27';
 
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
 const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv';
