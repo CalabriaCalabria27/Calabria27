@@ -1,7 +1,7 @@
 const RADIO_NAME = 'RadioCalabria27';
 
 // Change Stream URL Here, Supports, ICECAST, ZENO, SHOUTCAST, RADIOJAR and any other stream service.
-const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv?zs=_stPb8aHTierJGc8qTL45Q&adtonosListenerId=01HJHF3KX3088GJC32AC8RFYFG';
+const URL_STREAMING = 'https://stream-152.zeno.fm/dzsuinmlh3mtv';
 
 //API URL /
 const API_URL = 'https://twj.es/radio_info/?radio_url='+URL_STREAMING
