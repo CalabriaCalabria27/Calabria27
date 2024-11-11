@@ -9,6 +9,8 @@
     <link rel="shortcut icon" href="https://i.postimg.cc/Twyvg2gP/niiiii.png">
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400">
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unica+One&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZv2KxKjF0677iWnTW0CnDNyl8ErkiQQcBPt0vxLbJ1Ph8mDgtg2Zf9MXlUFLHx" crossorigin="anonymous">
+    
     <style>
         body, html {
             margin: 0;
@@ -58,6 +60,7 @@
             right: 20px;
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
         .control-button {
@@ -71,6 +74,33 @@
 
         .control-button:hover {
             background-color: #FFC107;
+        }
+
+        .rotation-text {
+            font-family: 'Roboto', sans-serif;
+            color: #FFFFFF;
+        }
+
+        .social-buttons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-button {
+            font-size: 30px;
+            color: white;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .social-button:hover {
+            color: #FFCD00;
         }
     </style>
     <script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
@@ -91,6 +121,13 @@
     <div class="controls">
         <button id="play-button" class="control-button">Play</button>
         <button id="stop-button" class="control-button">Stop</button>
+        <span class="rotation-text">Clicca Qui Per Attivare e Fermare La Rotazione</span>
+    </div>
+    
+    <div class="social-buttons">
+        <a href="https://www.facebook.com/yourpage" target="_blank" class="social-button"><i class="fab fa-facebook-square"></i></a>
+        <a href="https://www.instagram.com/yourpage" target="_blank" class="social-button"><i class="fab fa-instagram-square"></i></a>
+        <a href="https://www.youtube.com/yourchannel" target="_blank" class="social-button"><i class="fab fa-youtube-square"></i></a>
     </div>
 
     <script>
