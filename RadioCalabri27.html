@@ -1,73 +1,107 @@
-<html><head>
-<title>RadioCalabria27</title>
-<meta name="description" content="RadioCalabria27">
-<meta name="keywords" content="RadioCalabria27">
-<meta name="robots" content="RadioCalabria27">
-<meta name="googlebot" content="RadioCalabria27">
-<link rel="shortcut icon" href="https://i.postimg.cc/Twyvg2gP/niiiii.png">
-<script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
-<script src="https://calabriacalabria27.github.io/Calabria27/lunaradio-animado.js"></script>
-<!--
-body {
-	background-color:#0000FF ;
-}
--->
-</style>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadioCalabria27</title>
+    <meta name="description" content="RadioCalabria27">
+    <meta name="keywords" content="RadioCalabria27">
+    <meta name="robots" content="index, follow">
+    <link rel="shortcut icon" href="https://i.postimg.cc/Twyvg2gP/niiiii.png">
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400">
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unica+One&display=swap">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            animation: backgroundColorChange 10s ease infinite;
+        }
 
-<div id="lunaradio" style='width:100%; height:100%px;
--webkit-border-top-left-radius: 80px;
-  -webkit-border-top-right-radius: 50px;
-  -webkit-border-bottom-right-radius: 50px;
-  -webkit-border-bottom-left-radius: 50px;
-  -moz-border-radius-topleft: 50px;
-  -moz-border-radius-topright: 50px;
-  -moz-border-radius-bottomright: 50px;
-  -moz-border-radius-bottomleft: 50px;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
-  border-bottom-left-radius: 50px;
-  margin-top: -8px!important;
-  border: none;'>
-<div style="overflow:hidden; height:0px; width:0px;">
-</div>	
+        @keyframes backgroundColorChange {
+            0% {
+                background-color: blue;
+            }
+            50% {
+                background-color: gold;
+            }
+            100% {
+                background-color: blue;
+            }
+        }
 
+        #lunaradio {
+            width: 600px; /*Vi Raccomando Copiate */
+            height: 600px; /* Vi Raccomando Copiate */
+            position: absolute;
+            left: calc(50% - 300px); /*Vi Raccomando Copiate*/
+            top: calc(50% - 300px); /*Vi Raccomando Copiate  */
+            border-radius: 50%;  /* Vi Raccomando Copiate */
+            box-shadow: 0 0 70px rgba(255, 255, 255, 0.5);
+            animation: rotate 20s linear infinite;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.7);
+        }
 
-<script>
-$("#lunaradio").lunaradio({
-userinterface: "big", 
-backgroundcolor: "rgba",
-fontcolor: "#ffffff",
-hightlightcolor: "#FFCD00", 
-fontname: "Playball", 
-googlefont: "Playball&display=swap", 
-fontratio: "0.5", 
-radioname: "RadioCalabria27", 
-scroll: "False", 
-coverimage: "https://i.postimg.cc/Twyvg2gP/niiiii.png",
-onlycoverimage: "false",
-coverstyle: "Real",
-usevisualizer: "fake", 
-visualizertype: "7", 
-metadatatechnic: "ownmetadataurl",
-ownmetadataurl: "https://status.rcast.net/69407", 
-streamurl: "https://stream-174.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNzQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImZOMk00d2dfUzIyenRld043cU5VdWciLCJpYXQiOjE3MzA4MzEzODcsImV4cCI6MTczMDgzMTQ0N30.WFoRABkbPbFn1DSKGo6L4kD5CbKAd2973XgDzQ30cVA", 
-streamtype: "icecast", 
-icecastmountpoint: "/radio.mp3",
-radiozenoid: "dzsuinmlh3mtv",
-shoutcastpath: "/stream",
-shoutcastid: "", 
-streamsuffix: "", 
-radionomyid: "", 
-radionomyapikey: "",
-radiojarid: "",  
-radiocoid: "",
-itunestoken: "1000lIPN", 
-metadatainterval: "20000", 
-volume: "100",
-debug: "false",
-autoplay: "true"
-});
-</script>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
+    <script src="https://calabriacalabria27.github.io/Calabria27/lunaradio-animado.js"></script>
+</head>
+<body>
+    <div id="lunaradio" class="lunaaudioplayer">
+        <div id="lunaradioplayerwrapper" style="overflow: hidden; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+            <div id="lunaradiocoverwrapper" style="border-radius: 70%; overflow: hidden;">
+                <img src="img/512.png" alt="Cover" style="width: 100%; height: 100%; border-radius: 50%;">
+            </div>
+            <div id="lunaradiobuttonplay" style="cursor: pointer; z-index: 1;">
+                <svg>...SVG CODE...</svg> <!-- Replace with actual SVG or your button icon -->
+            </div>
+        </div>
+    </div>
 
-</body></html>
+    <script>
+        $("#lunaradio").lunaradio({
+            userinterface: "big",
+            backgroundcolor: "rgba",
+            fontcolor: "#ffffff",
+            highlightcolor: "#FFCD00",
+            fontname: "Playball",
+            googlefont: "Playball&display=swap",
+            fontratio: "0.5",
+            radioname: "RadioCalabria27",
+            scroll: "true",
+            coverimage: "https://i.postimg.cc/Twyvg2gP/niiiii.png",
+            onlycoverimage: "false",
+            coverstyle: "Real",
+            usevisualizer: "fake",
+            visualizertype: "7",
+            metadatatechnic: "ownmetadataurl",
+            ownmetadataurl: "https://status.rcast.net/69407", 
+            streamurl: "https://stream-174.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNzQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImZOMk00d2dfUzIyenRld272cU5VdWciLCJpYXQiOjE3MzA4MzEzODcsImV4cCI6MTczMDgzMTQ0N30.WFoRABkbPbFn1DSKGo6L4kD5CbKAd2973XgDzQ30cVA",
+            streamtype: "icecast",
+            icecastmountpoint: "/radio.mp3",
+            radiozenoid: "1d0ry230zf8uv",
+            shoutcastpath: "/stream",
+            shoutcastid: "",
+            streamsuffix: "",
+            radionomyid: "",
+            radionomyapikey: "",
+            radiojarid: "",
+            radiocoid: "",
+            itunestoken: "1000lIPN",
+            metadatainterval: "20000",
+            volume: "100",
+            debug: "false",
+            autoplay: "true"
+        });
+    </script>
+</body>
+</html>
