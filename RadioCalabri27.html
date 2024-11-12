@@ -12,8 +12,8 @@
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unica+One&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZv2KxKjF0677iWnTW0CnDNyl8ErkiQQcBPt0vxLbJ1Ph8mDgtg2Zf9MXlUFLHx" crossorigin="anonymous">
     
-     <style>
-        body, html {
+    <style>
+         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -41,7 +41,7 @@
             top: calc(50% - 300px);
             border-radius: 50%;
             box-shadow: 0 0 70px rgba(255, 255, 255, 0.5);
-            animation: rotate 20s linear infinite;
+            animation: rotate 35s linear infinite;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.7);
         }
@@ -77,31 +77,57 @@
             background-color: #FFC107;
         }
 
+        .non-clickable-button {
+            padding: 10px;
+            background-color: #FFCD00;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            color: #000000;
+            cursor: default;
+            pointer-events: none;
+        }
+
         .rotation-text {
             font-family: 'Roboto', sans-serif;
             color: #FFFFFF;
         }
 
-        .social-buttons {
+        .social-menu {
             position: absolute;
             top: 20px;
-            left: 20px;
+            left: 20px; /* Posiziona il menu a sinistra */
+        }
+
+        .social-button-toggle {
+            background-color: #FFCD00;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .social-button-toggle:hover {
+            background-color: #FFC107;
+        }
+
+        .social-buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-top: 10px;
         }
 
         .social-button {
-            font-size: 30px;
-            color: white;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            transition: color 0.3s;
+            display: flex;
+            align-items: center; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
+            text-decoration: none; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
+            color: inherit; /* Eredita il colore dal genitore */
         }
 
-        .social-button:hover {
-            color: #FFCD00;
+        .social-button img {
+            margin-right: 10px; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
         }
     </style>
     <script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
