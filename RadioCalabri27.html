@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +18,8 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
-            animation: backgroundColorChange 10s ease infinite;
+            background-color: transparent; /*E Severamente Vietato Copiare Play Realizzato da DjTestardo*/
+            user-select: none; /* Disabilita la selezione del testo */
         }
 
         @keyframes backgroundColorChange {
@@ -40,7 +42,7 @@
             top: calc(50% - 300px);
             border-radius: 50%;
             box-shadow: 0 0 70px rgba(255, 255, 255, 0.5);
-            animation: rotate 20s linear infinite;
+            animation: rotate 35s linear infinite;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.7);
         }
@@ -76,31 +78,57 @@
             background-color: #FFC107;
         }
 
+        .non-clickable-button {
+            padding: 10px;
+            background-color: #FFCD00;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Roboto', sans-serif;
+            color: #000000;
+            cursor: default;
+            pointer-events: none;
+        }
+
         .rotation-text {
             font-family: 'Roboto', sans-serif;
             color: #FFFFFF;
         }
 
-        .social-buttons {
+        .social-menu {
             position: absolute;
             top: 20px;
-            left: 20px;
+            left: 20px; /* Posiziona il menu a sinistra */
+        }
+
+        .social-button-toggle {
+            background-color: #FFCD00;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .social-button-toggle:hover {
+            background-color: #FFC107;
+        }
+
+        .social-buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-top: 10px;
         }
 
         .social-button {
-            font-size: 30px;
-            color: white;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            transition: color 0.3s;
+            display: flex;
+            align-items: center; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
+            text-decoration: none; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
+            color: inherit; /* Eredita il colore dal genitore */
         }
 
-        .social-button:hover {
-            color: #FFCD00;
+        .social-button img {
+            margin-right: 10px; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
         }
     </style>
     <script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
@@ -113,7 +141,7 @@
                 <img src="img/512.png" alt="Cover" style="width: 100%; height: 100%; border-radius: 50%;">
             </div>
             <div id="lunaradiobuttonplay" style="cursor: pointer; z-index: 1;">
-                <svg>...SVG CODE...</svg> <!-- Replace with actual SVG or your button icon -->
+                <svg>...SVG CODE...</svg>
             </div>
         </div>
     </div>
@@ -121,13 +149,25 @@
     <div class="controls">
         <button id="play-button" class="control-button">Play</button>
         <button id="stop-button" class="control-button">Stop</button>
-        <span class="rotation-text">Clicca Qui Per Attivare e Fermare La Rotazione</span>
+        <button class="non-clickable-button">⬅Clicca Qui Per Attivare e Fermare La Rotazione</button>
     </div>
     
-    <div class="social-buttons">
-        <a href="https://www.facebook.com/yourpage" target="_blank" class="social-button"><i class="fab fa-facebook-square"></i></a>
-        <a href="https://www.instagram.com/yourpage" target="_blank" class="social-button"><i class="fab fa-instagram-square"></i></a>
-        <a href="https://www.youtube.com/yourchannel" target="_blank" class="social-button"><i class="fab fa-youtube-square"></i></a>
+    <div class="social-menu">
+        <button class="social-button-toggle">☰ Seguici Su i Vari Social Network</button>
+        <div class="social-buttons" style="display: none;">
+            <a href="https://www.facebook.com/yourpage" target="_blank" class="social-button">
+                <img width="80px" src="https://i.postimg.cc/YS2Sc4Wc/png-clipart-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-int.png">
+                Facebook
+            </a>
+            <a href="https://www.instagram.com/yourpage" target="_blank" class="social-button">
+                <img width="80px" src="https://i.postimg.cc/43HSxPtp/sssssssssssaaa.png">
+                Instagram
+            </a>
+            <a href="https://www.youtube.com/" target="_blank" class="social-button">
+                <img width="80px" src="https://i.postimg.cc/SNdcjQ2m/nnnnnnnnnnnnn-removebg-preview.png">
+                YouTube
+            </a>
+        </div>
     </div>
 
     <script>
@@ -148,7 +188,7 @@
             visualizertype: "7",
             metadatatechnic: "ownmetadataurl",
             ownmetadataurl: "https://status.rcast.net/69407", 
-            streamurl: "https://stream-174.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNzQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImZOMk00d2dfUzIyenRld272cU5VdWciLCJpYXQiOjE3MzA4MzEzODcsImV4cCI6MTczMDgzMTQ0N30.WFoRABkbPbFn1DSKGo6L4kD5CbKAd2973XgDzQ30cVA",
+            streamurl: "https://stream-174.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNzquemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImZOMk00d2dfUzIyenRld272cU5VdWciLCJpYXQiOjE3MzA4MzEzODcsImV4cCI6MTczMDgzMTQ0N30.WFoRABkbPbFn1DSKGo6L4kD5CbKAd2973XgDzQ30cVA",
             streamtype: "icecast",
             icecastmountpoint: "/radio.mp3",
             radiozenoid: "1d0ry230zf8uv",
@@ -181,6 +221,9 @@
                 rotating = false;
             }
         });
+
+        $(".social-button-toggle").click(function() {
+            $(".social-buttons").toggle();
+        });
     </script>
 </body>
-</html>
