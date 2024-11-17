@@ -1,232 +1,74 @@
+<html><head>
+<title>RadioCalabria27</title>
+<meta name="description" content="RadioCalabria27">
+<meta name="keywords" content="RadioCalabria27">
+<meta name="robots" content="RadioCalabria27">
+<meta name="googlebot" content="RadioCalabria27">
+<link rel="shortcut icon" href="https://i.postimg.cc/Twyvg2gP/niiiii.png">
+<script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
+<script src="https://calabriacalabria27.github.io/Calabria27/lunaradio-animado.js"></script>
+<!--
+body {
+	background-color:#0000FF ;
+}
+-->
+</style>
 
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RadioCalabria27</title>
-    <meta name="description" content="RadioCalabria27">
-    <meta name="keywords" content="RadioCalabria27">
-    <meta name="robots" content="index, follow">
-    <link rel="shortcut icon" href="https://i.postimg.cc/Twyvg2gP/niiiii.png">
-    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400">
-    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Unica+One&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZv2KxKjF0677iWnTW0CnDNyl8ErkiQQcBPt0vxLbJ1Ph8mDgtg2Zf9MXlUFLHx" crossorigin="anonymous">
-    
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            animation: backgroundColorChange 10s ease infinite;
-            user-select: none; /* Disabilita la selezione del testo */
-        }
+<div id="lunaradio" style='width:100%; height:100%px;
+-webkit-border-top-left-radius: 80px;
+  -webkit-border-top-right-radius: 50px;
+  -webkit-border-bottom-right-radius: 50px;
+  -webkit-border-bottom-left-radius: 50px;
+  -moz-border-radius-topleft: 50px;
+  -moz-border-radius-topright: 50px;
+  -moz-border-radius-bottomright: 50px;
+  -moz-border-radius-bottomleft: 50px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  margin-top: -8px!important;
+  border: none;'>
+<div style="overflow:hidden; height:0px; width:0px;">
+</div>	
 
-        @keyframes backgroundColorChange {
-            0% {
-                background-color: blue;
-            }
-            50% {
-                background-color: gold;
-            }
-            100% {
-                background-color: blue;
-            }
-        }
 
-        #lunaradio {
-            width: 600px;
-            height: 600px;
-            position: absolute;
-            left: calc(50% - 300px);
-            top: calc(50% - 300px);
-            border-radius: 50%;
-            box-shadow: 0 0 70px rgba(255, 255, 255, 0.5);
-            animation: rotate 35s linear infinite;
-            overflow: hidden;
-            background: rgba(0, 0, 0, 0.7);
-        }
 
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
+<script>
+$("#lunaradio").lunaradio({
+userinterface: "big", 
+backgroundcolor: "rgba",
+fontcolor: "#ffffff",
+hightlightcolor: "#FFCD00", 
+fontname: "Playball", 
+googlefont: "Playball&display=swap", 
+fontratio: "0.5", 
+radioname: "RadioCalabria27", 
+scroll: "False", 
+coverimage: "https://i.postimg.cc/Twyvg2gP/niiiii.png",
+onlycoverimage: "false",
+coverstyle: "Real",
+usevisualizer: "fake", 
+visualizertype: "7", 
+metadatatechnic: "ownmetadataurl",
+ownmetadataurl: "https://status.rcast.net/69407", 
+streamurl: "https://stream-174.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNzQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6InFtU2N6YzlTUUJDVmJRcjFkNWpBZ1EiLCJpYXQiOjE3MzE4NzYxMTQsImV4cCI6MTczMTg3NjE3NH0.ZgORahPAFTK3Z3YFpg9uTmBIaElbqJoSGpu9hIvo3_M", 
+streamtype: "icecast", 
+icecastmountpoint: "/radio.mp3",
+radiozenoid: "dzsuinmlh3mtv",
+shoutcastpath: "/stream",
+shoutcastid: "", 
+streamsuffix: "", 
+radionomyid: "", 
+radionomyapikey: "",
+radiojarid: "",  
+radiocoid: "",
+itunestoken: "1000lIPN", 
+metadatainterval: "10000", 
+volume: "100",
+debug: "false",
+autoplay: "true"
+});
+</script>
 
-        .controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .control-button {
-            padding: 10px;
-            background-color: #FFCD00;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .control-button:hover {
-            background-color: #FFC107;
-        }
-
-        .non-clickable-button {
-            padding: 10px;
-            background-color: #FFCD00;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Roboto', sans-serif;
-            color: #000000;
-            cursor: default;
-            pointer-events: none;
-        }
-
-        .rotation-text {
-            font-family: 'Roboto', sans-serif;
-            color: #FFFFFF;
-        }
-
-        .social-menu {
-            position: absolute;
-            top: 20px;
-            left: 20px; /* Posiziona il menu a sinistra */
-        }
-
-        .social-button-toggle {
-            background-color: #FFCD00;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .social-button-toggle:hover {
-            background-color: #FFC107;
-        }
-
-        .social-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .social-button {
-            display: flex;
-            align-items: center; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
-            text-decoration: none; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
-            color: inherit; /* Eredita il colore dal genitore */
-        }
-
-        .social-button img {
-            margin-right: 10px; /* E Severamente Vietato Copiare Play Realizzato da DjTestardo */
-        }
-    </style>
-    <script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
-    <script src="https://calabriacalabria27.github.io/Calabria27/lunaradio-animado.js"></script>
-</head>
-<body>
-    <div id="lunaradio" class="lunaaudioplayer">
-        <div id="lunaradioplayerwrapper" style="overflow: hidden; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
-            <div id="lunaradiocoverwrapper" style="border-radius: 70%; overflow: hidden;">
-                <img src="img/512.png" alt="Cover" style="width: 100%; height: 100%; border-radius: 50%;">
-            </div>
-            <div id="lunaradiobuttonplay" style="cursor: pointer; z-index: 1;">
-                <svg>...SVG CODE...</svg>
-            </div>
-        </div>
-    </div>
-
-    <div class="controls">
-        <button id="play-button" class="control-button">Play</button>
-        <button id="stop-button" class="control-button">Stop</button>
-        <button class="non-clickable-button">⬅Clicca Qui Per Attivare e Fermare La Rotazione</button>
-    </div>
-    
-    <div class="social-menu">
-        <button class="social-button-toggle">☰ Seguici Su i Vari Social Network</button>
-        <div class="social-buttons" style="display: none;">
-            <a href="https://www.facebook.com/yourpage" target="_blank" class="social-button">
-                <img width="80px" src="https://i.postimg.cc/YS2Sc4Wc/png-clipart-facebook-logo-social-media-facebook-computer-icons-linkedin-logo-facebook-icon-media-int.png">
-                Facebook
-            </a>
-            <a href="https://www.instagram.com/yourpage" target="_blank" class="social-button">
-                <img width="80px" src="https://i.postimg.cc/43HSxPtp/sssssssssssaaa.png">
-                Instagram
-            </a>
-            <a href="https://www.youtube.com/" target="_blank" class="social-button">
-                <img width="80px" src="https://i.postimg.cc/SNdcjQ2m/nnnnnnnnnnnnn-removebg-preview.png">
-                YouTube
-            </a>
-        </div>
-    </div>
-
-    <script>
-        $("#lunaradio").lunaradio({
-            userinterface: "big",
-            backgroundcolor: "rgba",
-            fontcolor: "#ffffff",
-            highlightcolor: "#FFCD00",
-            fontname: "Playball",
-            googlefont: "Playball&display=swap",
-            fontratio: "0.5",
-            radioname: "RadioCalabria27",
-            scroll: "true",
-            coverimage: "https://i.postimg.cc/Twyvg2gP/niiiii.png",
-            onlycoverimage: "false",
-            coverstyle: "Real",
-            usevisualizer: "fake",
-            visualizertype: "7",
-            metadatatechnic: "ownmetadataurl",
-            artworkurl: "https://artwork.rcast.net/69407", 
-            ownmetadataurl: "https://status.rcast.net/69407", 
-            playlisturl: "https://playlist.rcast.net/69407",
-            streamurl: "https://stream-174.zeno.fm/dzsuinmlh3mtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJkenN1aW5tbGgzbXR2IiwiaG9zdCI6InN0cmVhbS0xNzquemVuby5mbSIsInJ0dGwiOjUsImp0aSI6ImZOMk00d2dfUzIyenRld272cU5VdWciLCJpYXQiOjE3MzA4MzEzODcsImV4cCI6MTczMDgzMTQ0N30.WFoRABkbPbFn1DSKGo6L4kD5CbKAd2973XgDzQ30cVA",
-            streamtype: "icecast",
-            icecastmountpoint: "/radio.mp3",
-            radiozenoid: "dzsuinmlh3mtv",
-            shoutcastpath: "/stream",
-            shoutcastid: "",
-            streamsuffix: "",
-            radionomyid: "",
-            radionomyapikey: "",
-            radiojarid: "",
-            radiocoid: "",
-            itunestoken: "1000lIPN",
-            metadatainterval: "20000",
-            volume: "100",
-            debug: "false",
-            autoplay: "true"
-        });
-
-        var rotating = true;
-
-        $("#play-button").click(function() {
-            if (!rotating) {
-                $("#lunaradio").css('animation', 'rotate 20s linear infinite');
-                rotating = true;
-            }
-        });
-
-        $("#stop-button").click(function() {
-            if (rotating) {
-                $("#lunaradio").css('animation', 'none');
-                rotating = false;
-            }
-        });
-
-        $(".social-button-toggle").click(function() {
-            $(".social-buttons").toggle();
-        });
-    </script>
-</body>
+</body></html>
