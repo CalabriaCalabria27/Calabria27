@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Audio</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #player { margin: 20px auto; }
+        #songInfo { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Player Audio</h1>
+    <!-- BEGINS: AUTO-GENERATED MUSES RADIO PLAYER CODE -->
+                                         
+                                        <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script> 
+                                        <script type="text/javascript">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        //<![CDATA[
+
+                                        MRP.insert({
+                                        'url':'https://stream-152.zeno.fm/dzsuinmlh3mtv?zs=_stPb8aHTierJGc8qTL45Q&adtonosListenerId=01HJHF3KX3088GJC32AC8RFYFG',
+                                        'lang':'it',
+                                        'codec':'mp3',
+                                        'volume':100,
+                                        'autoplay':true,
+                                        'forceHTML5':true,
+                                        'jsevents':true,
+                                        'buffering':0,
+                                        'title':'RadioCalabria27',
+                                        'wmode':'transparent',
+                                        'skin':'miniradio',
+                                        'width':289,
+                                        'height':112
+                                        });
+                                        //]]>
+                                        </script> <!-- ENDS: AUTO-GENERATED MUSES RADIO PLAYER CODE --></font></span>
+                                    </center>
+                                </center>
+                            </div>
+                        </center>
+                    </div>
+
+                    <center>
+    <div id="songInfo">
+        <h2>Titolo Corrente:</h2>
+        <p id="currentTitle"></p>
+    </div>
+
+    <script>
+        function updateSongInfo() {
+            fetch('https://status.rcast.net/69407')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('currentTitle').textContent = data.trim();
+                })
+                .catch(error => console.error('Errore nel recupero del titolo:', error));
+        }
+
+        // Aggiorna le informazioni sulla canzone ogni 20000 secondi
+        setInterval(updateSongInfo, 20000);
+
+        // Aggiorna le informazioni immediatamente all'avvio
+        updateSongInfo();
+    </script>
+</body>
+</html>
