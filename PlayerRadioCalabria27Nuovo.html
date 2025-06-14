@@ -195,46 +195,51 @@
     const volumeSlider = document.getElementById('volume');
     const coverLink = document.getElementById('cover-link');
 
-    let audio = new Audio(streamUrl);
-    audio.volume = Number(volumeSlider.value);
-    audio.autoplay = true;
+    let audio = null;
+    let retrying = false;
 
-    let retryTimeout = null;
+    function createAudio() {
+      if (audio) {
+        audio.pause();
+        audio.src = '';
+        audio.load();
+      }
 
-    function tryReconnect() {
-      if (!audio.paused) return;
+      audio = new Audio(streamUrl);
+      audio.volume = Number(volumeSlider.value);
+      audio.autoplay = true;
 
-      console.log("Tentativo di riconnessione...");
-      audio.load();
-      audio.play().then(() => {
+      audio.addEventListener('error', handleStreamError);
+      audio.addEventListener('stalled', handleStreamError);
+      audio.addEventListener('waiting', handleStreamError);
+      audio.addEventListener('ended', handleStreamError);
+
+      audio.addEventListener('playing', () => {
+        retrying = false;
         playstopBtn.textContent = '⏸';
-        console.log("Riconnesso con successo");
-      }).catch(() => {
-        retryTimeout = setTimeout(tryReconnect, 5000);
+        console.log("🟢 Audio in riproduzione.");
+      });
+
+      audio.play().catch(() => {
+        console.warn("⚠️ Autoplay bloccato. In attesa di clic.");
       });
     }
 
-    audio.play().catch(() => {
-      // Autoplay bloccato
-    });
+    function handleStreamError() {
+      if (retrying) return;
+      retrying = true;
+      console.warn("🔴 Stream interrotto. Tentativo di riconnessione...");
 
-    audio.addEventListener('ended', () => {
-      console.log("Stream terminato");
-      tryReconnect();
-    });
+      playstopBtn.textContent = '▶';
 
-    audio.addEventListener('error', () => {
-      console.log("Errore nello stream");
-      tryReconnect();
-    });
+      setTimeout(() => {
+        createAudio();
+      }, 2000);
+    }
 
     playstopBtn.addEventListener('click', () => {
-      if (retryTimeout) {
-        clearTimeout(retryTimeout);
-        retryTimeout = null;
-      }
-
-      if(audio.paused) {
+      if (!audio) return;
+      if (audio.paused) {
         audio.play();
         playstopBtn.textContent = '⏸';
       } else {
@@ -244,7 +249,7 @@
     });
 
     volumeSlider.addEventListener('input', () => {
-      audio.volume = Number(volumeSlider.value);
+      if (audio) audio.volume = Number(volumeSlider.value);
     });
 
     async function fetchNowPlaying() {
@@ -267,7 +272,7 @@
 
         await fetchCover(title, artist);
       } catch (error) {
-        console.error("Errore nel caricamento dei dati:", error);
+        console.error("Errore metadati:", error);
         titleElem.textContent = "Titolo non disponibile";
         artistElem.textContent = "";
         resetToDefault();
@@ -305,14 +310,10 @@
       coverLink.href = "#";
     }
 
+    // Inizializzazione
+    createAudio();
     fetchNowPlaying();
-    setInterval(() => {
-      fetchNowPlaying();
-
-      if (audio.paused && playstopBtn.textContent === '⏸') {
-        tryReconnect();
-      }
-    }, 20000);
+    setInterval(fetchNowPlaying, 20000);
   </script>
 </body>
 </html>
