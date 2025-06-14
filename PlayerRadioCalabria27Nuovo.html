@@ -173,6 +173,10 @@
     <div class="artist" id="mini-artist"></div>
 
     <div id="controls">
+      <audio id="player" preload="none" crossorigin="anonymous">
+        <source src="https://stream-174.zeno.fm/rtndtqysyq5tv" type="audio/mpeg" />
+        Il tuo browser non supporta l'audio.
+      </audio>
       <button id="playstop-btn" title="Play/Stop">▶</button>
     </div>
 
@@ -184,97 +188,31 @@
   </div>
 
   <script>
-    const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
-    const streamUrl = "https://stream-174.zeno.fm/rtndtqysyq5tv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJydG5kdHF5c3lxNXR2IiwiaG9zdCI6InN0cmVhbC0xNzQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6InQ1RU9MUTFHU0xxaWdZOC1CWDlUOHciLCJpYXQiOjE3NDk3NzY3MDksImV4cCI6MTc0OTc3Njc2OX0.Do4KwNmQijIgzXkqE7lvdl-ogVD9CkXnExAdM2hQNsA";
-    const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
-
+    const player = document.getElementById('player');
+    const playstopBtn = document.getElementById('playstop-btn');
+    const volumeSlider = document.getElementById('volume');
     const coverImg = document.getElementById('mini-cover');
     const titleElem = document.getElementById('mini-title');
     const artistElem = document.getElementById('mini-artist');
-    const playstopBtn = document.getElementById('playstop-btn');
-    const volumeSlider = document.getElementById('volume');
     const coverLink = document.getElementById('cover-link');
-
-    let audio = null;
-    let retrying = false;
-    let retryInterval = null;
-
-    function createAudio() {
-      if (audio) {
-        audio.pause();
-        audio.src = '';
-        audio.load();
-      }
-
-      audio = new Audio(streamUrl);
-      audio.volume = Number(volumeSlider.value);
-      audio.autoplay = true;
-
-      audio.addEventListener('error', handleStreamError);
-      audio.addEventListener('stalled', handleStreamError);
-      audio.addEventListener('waiting', handleStreamError);
-      audio.addEventListener('ended', handleStreamError);
-
-      audio.addEventListener('playing', () => {
-        retrying = false;
-        clearInterval(retryInterval);
-        playstopBtn.textContent = '⏸';
-        console.log("🟢 Audio in riproduzione.");
-      });
-
-      audio.play().catch(() => {
-        console.warn("⚠️ Autoplay bloccato. In attesa di clic.");
-      });
-    }
-
-    function handleStreamError() {
-      if (retrying) return;
-      retrying = true;
-
-      console.warn("🔴 Stream interrotto. Tentativo di riconnessione...");
-
-      if (audio) {
-        audio.pause();
-        audio.src = "";
-        audio.load();
-      }
-
-      playstopBtn.textContent = '▶';
-
-      retryInterval = setInterval(() => {
-        console.log("🔄 Tentativo di ripristino stream...");
-
-        const testAudio = new Audio(streamUrl);
-        testAudio.volume = Number(volumeSlider.value);
-
-        testAudio.addEventListener('canplay', () => {
-          console.log("✅ Diretta disponibile, riconnessione in corso...");
-          clearInterval(retryInterval);
-          retrying = false;
-          createAudio();
-        });
-
-        testAudio.addEventListener('error', () => {
-          testAudio.remove();
-        });
-
-        testAudio.load();
-      }, 3000);
-    }
+    const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
+    const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
 
     playstopBtn.addEventListener('click', () => {
-      if (!audio) return;
-      if (audio.paused) {
-        audio.play();
-        playstopBtn.textContent = '⏸';
+      if (player.paused) {
+        player.play().then(() => {
+          playstopBtn.textContent = '⏸';
+        }).catch(err => {
+          console.error("Autoplay bloccato:", err);
+        });
       } else {
-        audio.pause();
+        player.pause();
         playstopBtn.textContent = '▶';
       }
     });
 
     volumeSlider.addEventListener('input', () => {
-      if (audio) audio.volume = Number(volumeSlider.value);
+      player.volume = Number(volumeSlider.value);
     });
 
     async function fetchNowPlaying() {
@@ -286,18 +224,12 @@
         const artist = data?.artist?.trim();
 
         titleElem.textContent = title;
+        artistElem.textContent = artist || "";
+        artistElem.style.display = artist ? 'block' : 'none';
 
-        if (artist) {
-          artistElem.textContent = artist;
-          artistElem.style.display = 'block';
-        } else {
-          artistElem.textContent = "";
-          artistElem.style.display = 'none';
-        }
-
-        await fetchCover(title, artist);
-      } catch (error) {
-        console.error("Errore metadati:", error);
+        fetchCover(title, artist);
+      } catch (e) {
+        console.error("Errore metadati:", e);
         titleElem.textContent = "Titolo non disponibile";
         artistElem.textContent = "";
         resetToDefault();
@@ -305,11 +237,6 @@
     }
 
     async function fetchCover(title, artist) {
-      if (!title) {
-        resetToDefault();
-        return;
-      }
-
       const query = encodeURIComponent(artist ? `${title} ${artist}` : title);
       const proxy = "https://corsproxy.io/?";
       const itunesUrl = `${proxy}https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
@@ -335,8 +262,7 @@
       coverLink.href = "#";
     }
 
-    // Inizializzazione
-    createAudio();
+    player.volume = 1;
     fetchNowPlaying();
     setInterval(fetchNowPlaying, 20000);
   </script>
