@@ -265,6 +265,16 @@
     player.volume = 1;
     fetchNowPlaying();
     setInterval(fetchNowPlaying, 20000);
+
+    // Avvia lo streaming automaticamente all'apertura
+    window.addEventListener('load', () => {
+      player.play().then(() => {
+        playstopBtn.textContent = '⏸';
+      }).catch(err => {
+        console.warn("Autoplay bloccato:", err);
+        playstopBtn.textContent = '▶';
+      });
+    });
   </script>
 </body>
 </html>
