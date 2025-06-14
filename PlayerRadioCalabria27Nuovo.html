@@ -152,7 +152,7 @@
       <span class="bar">|</span>
     </div>
 
-    <div class="artist" id="mini-artist" style="display:none;"></div>
+    <div class="artist" id="mini-artist"></div>
 
     <div id="controls">
       <audio id="player" preload="none" crossorigin="anonymous"></audio>
@@ -175,23 +175,26 @@
   const artistElem = document.getElementById('mini-artist');
   const coverLink = document.getElementById('cover-link');
 
+  // URL streaming diretta (live)
   const liveStreamUrl = "https://stream-174.zeno.fm/rtndtqysyq5tv";
-  const backupStreamUrl = "https://your-backup-stream-url.com/stream"; // Sostituisci con URL reale backup
+  // URL streaming backup (playlist canzoni)
+  const backupStreamUrl = "https://your-backup-stream-url.com/stream"; // <-- METTI QUI la sorgente di backup
 
+  // API per metadati
   const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
 
   const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
 
-  let isPlayingLive = true;
-  let userPaused = false;
-  let currentStreamUrl = "";
+  let isPlayingLive = false; // Stato se sta su live o backup
+  let userPaused = false;    // Stato pausa da utente (per rispettare play/pause manuale)
 
+  // Imposta volume iniziale
   player.volume = Number(volumeSlider.value);
 
+  // Funzione per cambiare sorgente e avviare
   async function playStream(url, isLive) {
-    if (currentStreamUrl !== url) {
+    if (player.src !== url) {
       player.src = url;
-      currentStreamUrl = url;
     }
     isPlayingLive = isLive;
     try {
@@ -204,12 +207,13 @@
     }
   }
 
+  // Rileva se diretta è online tramite API (controlla se sta trasmettendo)
   async function checkLiveStatus() {
     try {
       const response = await fetch(nowPlayingUrl);
       const data = await response.json();
 
-      const isLiveNow = data?.is_live === true || (data?.title && data?.artist);
+      const isLiveNow = data?.is_live === true && !!(data.title && data.artist);
 
       // Aggiorna titolo e artista
       if (data.title) {
@@ -217,7 +221,6 @@
       } else {
         titleElem.textContent = "Sconosciuto";
       }
-
       if (data.artist) {
         artistElem.textContent = data.artist;
         artistElem.style.display = 'block';
@@ -228,25 +231,27 @@
       // Aggiorna copertina
       updateCover(data.title, data.artist);
 
-      // Se diretta online e non stiamo su live, switcha (solo se utente non ha messo in pausa)
+      // Se la diretta è online ma non stiamo su live, switcha
       if (isLiveNow && !isPlayingLive && !userPaused) {
         console.log("Diretta tornata online, cambio a live");
-        await playStream(liveStreamUrl, true);
+        playStream(liveStreamUrl, true);
       }
 
-      // Se diretta offline e stiamo su live, switcha a backup (se utente non ha messo in pausa)
+      // Se la diretta non è online e stiamo su live, switcha al backup
       if (!isLiveNow && isPlayingLive && !userPaused) {
         console.log("Diretta offline, cambio a backup");
-        await playStream(backupStreamUrl, false);
+        playStream(backupStreamUrl, false);
       }
     } catch (e) {
       console.warn("Errore controllo live status:", e);
+      // Se errore e stiamo su live, passa a backup
       if (isPlayingLive && !userPaused) {
-        await playStream(backupStreamUrl, false);
+        playStream(backupStreamUrl, false);
       }
     }
   }
 
+  // Funzione per aggiornare la copertina da iTunes
   async function updateCover(title, artist) {
     if (!title) {
       coverImg.src = defaultImage;
@@ -254,7 +259,7 @@
       return;
     }
     const query = encodeURIComponent((artist ? artist + " " : "") + title);
-    const proxy = "https://corsproxy.io/?"; // Proxy per CORS
+    const proxy = "https://corsproxy.io/?";
     const itunesUrl = `${proxy}https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
 
     try {
@@ -274,6 +279,7 @@
     }
   }
 
+  // Gestione pulsante play/stop
   playstopBtn.addEventListener('click', () => {
     if (player.paused) {
       userPaused = false;
@@ -286,37 +292,41 @@
     }
   });
 
+  // Regola volume
   volumeSlider.addEventListener('input', () => {
     player.volume = Number(volumeSlider.value);
   });
 
-  player.addEventListener('error', async () => {
+  // Se c’è un errore di streaming (es. diretta offline, URL morto)
+  player.addEventListener('error', () => {
     if (!userPaused) {
       if (isPlayingLive) {
         console.log("Errore su live, cambio a backup");
-        await playStream(backupStreamUrl, false);
+        playStream(backupStreamUrl, false);
       } else {
-        // Riprova backup
+        // Prova a rilanciare backup
         player.load();
         player.play().catch(() => {});
       }
     }
   });
 
+  // Se lo streaming finisce (es. backup finisce), riavvia
   player.addEventListener('ended', () => {
     if (!userPaused) {
       player.play().catch(() => {});
     }
   });
 
+  // Controlla live status ogni 20 secondi
   setInterval(checkLiveStatus, 20000);
 
+  // All’avvio pagina, controlla live e avvia lo streaming
   window.addEventListener('load', async () => {
     await checkLiveStatus();
-
-    // Se dopo controllo status non è partita nessuna sorgente (es. API offline), parte live di default
+    // Se non è stato avviato da checkLiveStatus, prova tu
     if (!player.src) {
-      await playStream(liveStreamUrl, true);
+      playStream(liveStreamUrl, true);
     }
   });
 </script>
