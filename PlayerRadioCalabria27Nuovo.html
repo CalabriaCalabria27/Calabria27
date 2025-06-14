@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RadioCalabria27 Mini Player</title>
   <style>
     body {
@@ -14,6 +14,7 @@
       align-items: center;
       height: 100vh;
     }
+
     #mini-player {
       background: rgba(14, 11, 90, 0.85);
       padding: 15px;
@@ -24,9 +25,11 @@
       border-image: linear-gradient(45deg, #ff416c, #ff4b2b, #1dd1a1, #54a0ff) 1;
       position: relative;
     }
+
     #mini-player a {
       display: inline-block;
     }
+
     #mini-player img {
       width: 100%;
       height: auto;
@@ -34,9 +37,11 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       transition: transform 0.3s ease;
     }
+
     #mini-player img:hover {
       transform: scale(1.03);
     }
+
     .title-wrapper {
       display: flex;
       align-items: center;
@@ -46,26 +51,31 @@
       font-size: 1em;
       margin: 5px 0;
     }
+
     .bar {
       font-size: 1.2em;
       color: #1dd1a1;
       padding: 0 4px;
     }
+
     .scrolling-title-container {
       overflow: hidden;
       white-space: nowrap;
       width: 100%;
       text-align: left;
     }
+
     .scrolling-title {
       display: inline-block;
       animation: scroll-left 10s linear infinite;
       padding-left: 100%;
     }
+
     @keyframes scroll-left {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
     }
+
     .artist {
       font-size: 0.9em;
       color: #ccc;
@@ -74,6 +84,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     #station-name {
       margin-top: 10px;
       font-size: 0.95em;
@@ -81,9 +92,11 @@
       font-weight: bold;
       letter-spacing: 1px;
     }
+
     #controls {
       margin: 10px 0;
     }
+
     #playstop-btn {
       background: linear-gradient(135deg, #1dd1a1, #54a0ff);
       border: none;
@@ -100,15 +113,18 @@
       box-shadow: 0 0 10px rgba(0, 255, 200, 0.4);
       user-select: none;
     }
+
     #playstop-btn:hover {
       transform: scale(1.1);
       filter: brightness(1.1);
     }
+
     #volume-wrapper {
       margin-top: 10px;
       display: flex;
       justify-content: center;
     }
+
     #volume {
       width: 150px;
       height: 8px;
@@ -118,6 +134,7 @@
       -webkit-appearance: none;
       appearance: none;
     }
+
     #volume::-webkit-slider-thumb {
       -webkit-appearance: none;
       height: 12px;
@@ -128,6 +145,7 @@
       cursor: pointer;
       margin-top: -2px;
     }
+
     #volume::-moz-range-thumb {
       height: 12px;
       width: 12px;
@@ -155,7 +173,6 @@
     <div class="artist" id="mini-artist"></div>
 
     <div id="controls">
-      <audio id="player" preload="none" crossorigin="anonymous"></audio>
       <button id="playstop-btn" title="Play/Stop">▶</button>
     </div>
 
@@ -166,170 +183,146 @@
     <div id="station-name">⎈◕RαdıoCαlαbrıα27◕⎈</div>
   </div>
 
-<script>
-  const player = document.getElementById('player');
-  const playstopBtn = document.getElementById('playstop-btn');
-  const volumeSlider = document.getElementById('volume');
-  const coverImg = document.getElementById('mini-cover');
-  const titleElem = document.getElementById('mini-title');
-  const artistElem = document.getElementById('mini-artist');
-  const coverLink = document.getElementById('cover-link');
+  <script>
+    const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
+    const streamUrl = "https://stream-174.zeno.fm/rtndtqysyq5tv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJydG5kdHF5c3lxNXR2IiwiaG9zdCI6InN0cmVhbC0xNzQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6InQ1RU9MUTFHU0xxaWdZOC1CWDlUOHciLCJpYXQiOjE3NDk3NzY3MDksImV4cCI6MTc0OTc3Njc2OX0.Do4KwNmQijIgzXkqE7lvdl-ogVD9CkXnExAdM2hQNsA";
+    const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
 
-  // URL streaming diretta (live)
-  const liveStreamUrl = "https://stream-174.zeno.fm/rtndtqysyq5tv";
-  // URL streaming backup (playlist canzoni)
-  const backupStreamUrl = "https://your-backup-stream-url.com/stream"; // <-- METTI QUI la sorgente di backup
+    const coverImg = document.getElementById('mini-cover');
+    const titleElem = document.getElementById('mini-title');
+    const artistElem = document.getElementById('mini-artist');
+    const playstopBtn = document.getElementById('playstop-btn');
+    const volumeSlider = document.getElementById('volume');
+    const coverLink = document.getElementById('cover-link');
 
-  // API per metadati
-  const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
+    let audio = new Audio();
+    audio.volume = Number(volumeSlider.value);
 
-  const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
+    let retryTimeout = null;
 
-  let isPlayingLive = false; // Stato se sta su live o backup
-  let userPaused = false;    // Stato pausa da utente (per rispettare play/pause manuale)
-
-  // Imposta volume iniziale
-  player.volume = Number(volumeSlider.value);
-
-  // Funzione per cambiare sorgente e avviare
-  async function playStream(url, isLive) {
-    if (player.src !== url) {
-      player.src = url;
+    function startStream() {
+      audio.src = streamUrl;
+      audio.load();
+      audio.play().then(() => {
+        playstopBtn.textContent = '⏸';
+      }).catch(() => {
+        // Autoplay bloccato, aspetta click utente
+        playstopBtn.textContent = '▶';
+      });
     }
-    isPlayingLive = isLive;
-    try {
-      await player.play();
-      playstopBtn.textContent = '⏸';
-      userPaused = false;
-    } catch (e) {
-      console.warn("Play fallito", e);
+
+    audio.onerror = () => {
+      console.log("Errore streaming, riprovo in 5 secondi...");
       playstopBtn.textContent = '▶';
-    }
-  }
+      audio.pause();
+      if(retryTimeout) clearTimeout(retryTimeout);
+      retryTimeout = setTimeout(() => {
+        startStream();
+      }, 5000);
+    };
 
-  // Rileva se diretta è online tramite API (controlla se sta trasmettendo)
-  async function checkLiveStatus() {
-    try {
-      const response = await fetch(nowPlayingUrl);
-      const data = await response.json();
+    audio.onended = () => {
+      console.log("Stream terminato, riprovo in 5 secondi...");
+      playstopBtn.textContent = '▶';
+      if(retryTimeout) clearTimeout(retryTimeout);
+      retryTimeout = setTimeout(() => {
+        startStream();
+      }, 5000);
+    };
 
-      const isLiveNow = data?.is_live === true && !!(data.title && data.artist);
+    // Funzione per aggiornare titolo e artista da API nowplaying
+    async function fetchNowPlaying() {
+      try {
+        const response = await fetch(nowPlayingUrl);
+        const data = await response.json();
 
-      // Aggiorna titolo e artista
-      if (data.title) {
-        titleElem.textContent = data.title;
-      } else {
-        titleElem.textContent = "Sconosciuto";
-      }
-      if (data.artist) {
-        artistElem.textContent = data.artist;
-        artistElem.style.display = 'block';
-      } else {
-        artistElem.style.display = 'none';
-      }
+        const title = data?.title?.trim() || "Sconosciuto";
+        const artist = data?.artist?.trim();
 
-      // Aggiorna copertina
-      updateCover(data.title, data.artist);
+        titleElem.textContent = title;
 
-      // Se la diretta è online ma non stiamo su live, switcha
-      if (isLiveNow && !isPlayingLive && !userPaused) {
-        console.log("Diretta tornata online, cambio a live");
-        playStream(liveStreamUrl, true);
-      }
+        if (artist) {
+          artistElem.textContent = artist;
+          artistElem.style.display = 'block';
+        } else {
+          artistElem.textContent = "";
+          artistElem.style.display = 'none';
+        }
 
-      // Se la diretta non è online e stiamo su live, switcha al backup
-      if (!isLiveNow && isPlayingLive && !userPaused) {
-        console.log("Diretta offline, cambio a backup");
-        playStream(backupStreamUrl, false);
-      }
-    } catch (e) {
-      console.warn("Errore controllo live status:", e);
-      // Se errore e stiamo su live, passa a backup
-      if (isPlayingLive && !userPaused) {
-        playStream(backupStreamUrl, false);
+        await fetchCover(title, artist);
+      } catch (error) {
+        console.error("Errore nel caricamento dei dati:", error);
+        titleElem.textContent = "Titolo non disponibile";
+        artistElem.textContent = "";
+        resetToDefault();
       }
     }
-  }
 
-  // Funzione per aggiornare la copertina da iTunes
-  async function updateCover(title, artist) {
-    if (!title) {
+    // Funzione per cercare copertina tramite iTunes
+    async function fetchCover(title, artist) {
+      if (!title) {
+        resetToDefault();
+        return;
+      }
+
+      const query = encodeURIComponent(artist ? `${title} ${artist}` : title);
+      const proxy = "https://corsproxy.io/?";
+      const itunesUrl = `${proxy}https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
+
+      try {
+        const response = await fetch(itunesUrl);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+          const coverUrl = data.results[0].artworkUrl100.replace('100x100', '300x300');
+          coverImg.src = coverUrl;
+          if (data.results[0].trackViewUrl) {
+            coverLink.href = data.results[0].trackViewUrl;
+          } else {
+            coverLink.href = "#";
+          }
+        } else {
+          resetToDefault();
+        }
+      } catch {
+        resetToDefault();
+      }
+    }
+
+    function resetToDefault() {
       coverImg.src = defaultImage;
       coverLink.href = "#";
-      return;
     }
-    const query = encodeURIComponent((artist ? artist + " " : "") + title);
-    const proxy = "https://corsproxy.io/?";
-    const itunesUrl = `${proxy}https://itunes.apple.com/search?term=${query}&limit=1&entity=song`;
 
-    try {
-      const res = await fetch(itunesUrl);
-      const data = await res.json();
-      if (data.results && data.results.length > 0) {
-        const coverUrl = data.results[0].artworkUrl100.replace('100x100', '300x300');
-        coverImg.src = coverUrl;
-        coverLink.href = data.results[0].trackViewUrl || "#";
+    // Avvio streaming all'apertura pagina
+    startStream();
+
+    // Aggiorna dati nowplaying ogni 20 secondi
+    fetchNowPlaying();
+    setInterval(fetchNowPlaying, 20000);
+
+    // Play/Pausa
+    playstopBtn.addEventListener('click', () => {
+      if(audio.paused) {
+        audio.play().then(() => {
+          playstopBtn.textContent = '⏸';
+        }).catch(() => {
+          playstopBtn.textContent = '▶';
+        });
       } else {
-        coverImg.src = defaultImage;
-        coverLink.href = "#";
+        audio.pause();
+        playstopBtn.textContent = '▶';
+        if(retryTimeout) {
+          clearTimeout(retryTimeout);
+          retryTimeout = null;
+        }
       }
-    } catch {
-      coverImg.src = defaultImage;
-      coverLink.href = "#";
-    }
-  }
+    });
 
-  // Gestione pulsante play/stop
-  playstopBtn.addEventListener('click', () => {
-    if (player.paused) {
-      userPaused = false;
-      player.play();
-      playstopBtn.textContent = '⏸';
-    } else {
-      userPaused = true;
-      player.pause();
-      playstopBtn.textContent = '▶';
-    }
-  });
-
-  // Regola volume
-  volumeSlider.addEventListener('input', () => {
-    player.volume = Number(volumeSlider.value);
-  });
-
-  // Se c’è un errore di streaming (es. diretta offline, URL morto)
-  player.addEventListener('error', () => {
-    if (!userPaused) {
-      if (isPlayingLive) {
-        console.log("Errore su live, cambio a backup");
-        playStream(backupStreamUrl, false);
-      } else {
-        // Prova a rilanciare backup
-        player.load();
-        player.play().catch(() => {});
-      }
-    }
-  });
-
-  // Se lo streaming finisce (es. backup finisce), riavvia
-  player.addEventListener('ended', () => {
-    if (!userPaused) {
-      player.play().catch(() => {});
-    }
-  });
-
-  // Controlla live status ogni 20 secondi
-  setInterval(checkLiveStatus, 20000);
-
-  // All’avvio pagina, controlla live e avvia lo streaming
-  window.addEventListener('load', async () => {
-    await checkLiveStatus();
-    // Se non è stato avviato da checkLiveStatus, prova tu
-    if (!player.src) {
-      playStream(liveStreamUrl, true);
-    }
-  });
-</script>
-
+    // Volume
+    volumeSlider.addEventListener('input', () => {
+      audio.volume = Number(volumeSlider.value);
+    });
+  </script>
 </body>
 </html>
