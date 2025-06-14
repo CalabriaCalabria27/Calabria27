@@ -198,17 +198,40 @@
     const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
     const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
 
+    // Funzione per avviare lo streaming con tentativi di retry
+    async function startStreaming() {
+      try {
+        await player.play();
+        playstopBtn.textContent = '⏸';
+      } catch (err) {
+        console.warn("Autoplay bloccato o errore di riproduzione:", err);
+        playstopBtn.textContent = '▶';
+        // Riprova dopo 3 secondi
+        setTimeout(() => {
+          startStreaming();
+        }, 3000);
+      }
+    }
+
+    // Click play/pause
     playstopBtn.addEventListener('click', () => {
       if (player.paused) {
-        player.play().then(() => {
-          playstopBtn.textContent = '⏸';
-        }).catch(err => {
-          console.error("Autoplay bloccato:", err);
-        });
+        startStreaming();
       } else {
         player.pause();
         playstopBtn.textContent = '▶';
       }
+    });
+
+    // Riconnessione automatica su errore o fine streaming
+    player.addEventListener('error', () => {
+      console.warn("Errore di streaming, tentativo di riconnessione...");
+      startStreaming();
+    });
+
+    player.addEventListener('ended', () => {
+      console.log("Streaming terminato, tentativo di riconnessione...");
+      startStreaming();
     });
 
     volumeSlider.addEventListener('input', () => {
@@ -268,12 +291,7 @@
 
     // Avvia lo streaming automaticamente all'apertura
     window.addEventListener('load', () => {
-      player.play().then(() => {
-        playstopBtn.textContent = '⏸';
-      }).catch(err => {
-        console.warn("Autoplay bloccato:", err);
-        playstopBtn.textContent = '▶';
-      });
+      startStreaming();
     });
   </script>
 </body>
