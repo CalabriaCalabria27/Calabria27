@@ -197,6 +197,7 @@
 
     let audio = null;
     let retrying = false;
+    let retryInterval = null;
 
     function createAudio() {
       if (audio) {
@@ -216,6 +217,7 @@
 
       audio.addEventListener('playing', () => {
         retrying = false;
+        clearInterval(retryInterval);
         playstopBtn.textContent = '⏸';
         console.log("🟢 Audio in riproduzione.");
       });
@@ -228,13 +230,36 @@
     function handleStreamError() {
       if (retrying) return;
       retrying = true;
+
       console.warn("🔴 Stream interrotto. Tentativo di riconnessione...");
+
+      if (audio) {
+        audio.pause();
+        audio.src = "";
+        audio.load();
+      }
 
       playstopBtn.textContent = '▶';
 
-      setTimeout(() => {
-        createAudio();
-      }, 2000);
+      retryInterval = setInterval(() => {
+        console.log("🔄 Tentativo di ripristino stream...");
+
+        const testAudio = new Audio(streamUrl);
+        testAudio.volume = Number(volumeSlider.value);
+
+        testAudio.addEventListener('canplay', () => {
+          console.log("✅ Diretta disponibile, riconnessione in corso...");
+          clearInterval(retryInterval);
+          retrying = false;
+          createAudio();
+        });
+
+        testAudio.addEventListener('error', () => {
+          testAudio.remove();
+        });
+
+        testAudio.load();
+      }, 3000);
     }
 
     playstopBtn.addEventListener('click', () => {
