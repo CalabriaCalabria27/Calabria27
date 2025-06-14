@@ -212,7 +212,7 @@
     }
 
     audio.onerror = () => {
-      console.log("Errore streaming, riprovo in 5 secondi...");
+      console.log("Errore streaming, riprovo in 0 secondi...");
       playstopBtn.textContent = '▶';
       audio.pause();
       if(retryTimeout) clearTimeout(retryTimeout);
@@ -222,7 +222,7 @@
     };
 
     audio.onended = () => {
-      console.log("Stream terminato, riprovo in 5 secondi...");
+      console.log("Stream terminato, riprovo in 0 secondi...");
       playstopBtn.textContent = '▶';
       if(retryTimeout) clearTimeout(retryTimeout);
       retryTimeout = setTimeout(() => {
