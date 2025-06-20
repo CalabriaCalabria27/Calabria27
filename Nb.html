@@ -22,7 +22,7 @@
 
       // Riavvio automatico dello streaming in caso di errore o fine
       function setupAutoRestart() {
-        const interval = 5000; // 5 secondi
+        const interval = 1000; // 0 secondi
         const retryStream = () => {
           const audio = document.querySelector('audio');
           if (audio) {
