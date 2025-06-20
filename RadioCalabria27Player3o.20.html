@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RadioCalabria27 Player</title>
+  <link rel="shortcut icon" href="https://xatimg.com/image/kGPpzvaUUtNW.png" />
+  <style>
+    /* (STILI INALTERATI) */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      color: #fff;
+    }
+
+    #rainbow-border {
+      padding: 4px;
+      border-radius: 18px;
+      background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet, red);
+      background-size: 400% 400%;
+      animation: rainbow-border 10s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes rainbow-border {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #player-wrapper {
+      display: flex;
+      gap: 2px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      background-color: #000;
+    }
+
+    #mini-player, #playlist-container {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #mini-player {
+      background: rgba(14, 11, 90, 0.85);
+      padding: 15px;
+      width: 260px;
+      height: 480px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      border: 2px solid;
+      border-image: linear-gradient(45deg, #ff416c, #ff4b2b, #1dd1a1, #54a0ff) 1;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    #mini-player img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #mini-player img:hover {
+      transform: scale(1.03);
+    }
+
+    .title-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1em;
+      margin: 5px 0;
+    }
+
+    .bar {
+      font-size: 1.2em;
+      color: #1dd1a1;
+      padding: 0 4px;
+    }
+
+    .scrolling-title-container {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100%;
+      text-align: left;
+    }
+
+    .scrolling-title {
+      display: inline-block;
+      animation: scroll-left 10s linear infinite;
+      padding-left: 100%;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .artist {
+      font-size: 0.9em;
+      color: #ccc;
+      margin-top: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #station-name {
+      margin-top: 10px;
+      font-size: 0.95em;
+      color: #1dd1a1;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: auto;
+    }
+
+    #controls {
+      margin: 10px 0;
+    }
+
+    #playstop-btn {
+      background: linear-gradient(135deg, #1dd1a1, #54a0ff);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 0 10px rgba(0, 255, 200, 0.4);
+      user-select: none;
+    }
+
+    #playstop-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #volume-wrapper {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #volume {
+      width: 150px;
+    }
+
+    #playlist-container {
+      background: rgba(14, 11, 90, 0.85);
+      padding: 15px;
+      width: 700px;
+      height: 480px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      border: 2px solid;
+      border-image: linear-gradient(45deg, #ff416c, #ff4b2b, #1dd1a1, #54a0ff) 1;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #playlist-header {
+      text-align: center;
+      color: #1dd1a1;
+      font-size: 1.2em;
+      margin-bottom: 3px;
+      user-select: none;
+    }
+
+    #playlist-header h3 {
+      margin: 0;
+      line-height: 1.2;
+      font-size: 1.1em;
+    }
+
+    #playlist-hr {
+      border: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, #ff416c, #ff4b2b, #1dd1a1, #54a0ff);
+      margin: 0 0 10px 0;
+      width: 100%;
+    }
+
+    #playlist {
+      overflow-y: auto;
+      flex-grow: 1;
+      padding-right: 4px;
+    }
+
+    .track {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 6px;
+      background-color: #1c1c1c;
+      border-left: 4px solid transparent;
+    }
+
+    .track.active {
+      border-left: 4px solid yellow;
+      background-color: #2a2a00;
+    }
+
+    .track img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <div id="rainbow-border">
+    <div id="player-wrapper">
+      <div id="mini-player">
+        <a id="cover-link" href="#" target="_blank">
+          <img id="mini-cover" src="https://xatimg.com/image/kGPpzvaUUtNW.png" alt="Copertina" />
+        </a>
+
+        <div class="title-wrapper">
+          <span class="bar">|</span>
+          <div class="scrolling-title-container">
+            <div class="scrolling-title" id="mini-title">Caricamento...</div>
+          </div>
+          <span class="bar">|</span>
+        </div>
+
+        <div class="artist" id="mini-artist"></div>
+        <div id="controls"><button id="playstop-btn">▶</button></div>
+        <div id="volume-wrapper"><input type="range" id="volume" min="0" max="1" step="0.01" value="1" /></div>
+        <div id="station-name">⎈◕RαdıoCαlαbrıα27◕⎈</div>
+      </div>
+
+      <div id="playlist-container">
+        <div id="playlist-header"><h3>Playlist Corrente</h3></div>
+        <hr id="playlist-hr" />
+        <div id="playlist"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const nowPlayingUrl = "https://zenoplay.zenomedia.com/api/zenofm/nowplaying/rtndtqysyq5tv/";
+    const streamUrl = "https://stream-174.zeno.fm/rtndtqysyq5tv";
+    const defaultImage = "https://xatimg.com/image/kGPpzvaUUtNW.png";
+
+    const titleElem = document.getElementById("mini-title");
+    const artistElem = document.getElementById("mini-artist");
+    const coverImg = document.getElementById("mini-cover");
+    const coverLink = document.getElementById("cover-link");
+    const playstopBtn = document.getElementById("playstop-btn");
+    const volumeSlider = document.getElementById("volume");
+    const playlistEl = document.getElementById("playlist");
+
+    let audio = new Audio(streamUrl);
+    audio.volume = volumeSlider.value;
+
+    let lastTitle = "";
+    let playlist = JSON.parse(localStorage.getItem("playlist")) || [];
+
+    // ⏰ AGGIUNTA: reset playlist a mezzanotte
+    let lastResetDate = localStorage.getItem("lastResetDate") || "";
+    function checkMidnightReset() {
+      const now = new Date();
+      const today = now.toISOString().split("T")[0];
+      if (today !== lastResetDate) {
+        playlist = [];
+        localStorage.setItem("playlist", JSON.stringify([]));
+        localStorage.setItem("lastResetDate", today);
+        console.log("Playlist azzerata a mezzanotte");
+      }
+    }
+
+    playstopBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play();
+        playstopBtn.textContent = "⏸";
+      } else {
+        audio.pause();
+        playstopBtn.textContent = "▶";
+      }
+    });
+
+    volumeSlider.addEventListener("input", () => {
+      audio.volume = volumeSlider.value;
+    });
+
+    async function fetchNowPlaying() {
+      checkMidnightReset(); // ✅ Aggiunto qui
+
+      try {
+        const res = await fetch(nowPlayingUrl);
+        const data = await res.json();
+
+        const title = data.title?.trim() || "Sconosciuto";
+        const artist = data.artist?.trim() || "";
+
+        titleElem.textContent = title;
+        artistElem.textContent = artist;
+
+        if (title !== lastTitle) {
+          lastTitle = title;
+          const cover = await fetchCover(title, artist);
+          updateCover(cover);
+          addTrack(title, artist, cover);
+        }
+
+        renderPlaylist(title);
+      } catch (e) {
+        console.error("Errore nel caricamento dei dati:", e);
+        titleElem.textContent = "Errore caricamento";
+        artistElem.textContent = "";
+        coverImg.src = defaultImage;
+        coverLink.href = "#";
+      }
+    }
+
+    async function fetchCover(title, artist) {
+      try {
+        const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(title + " " + artist)}&limit=1`);
+        const data = await res.json();
+        if (data.results.length > 0) {
+          return data.results[0].artworkUrl100.replace("100x100", "300x300");
+        }
+      } catch {}
+      return defaultImage;
+    }
+
+    function updateCover(cover) {
+      coverImg.src = cover;
+      coverLink.href = cover !== defaultImage ? cover : "#";
+    }
+
+    function addTrack(title, artist, cover) {
+      const index = playlist.findIndex(t => t.title === title && t.artist === artist);
+      if (index === -1) {
+        playlist.push({ title, artist, cover });
+      } else {
+        const [existingTrack] = playlist.splice(index, 1);
+        playlist.push(existingTrack);
+      }
+      localStorage.setItem("playlist", JSON.stringify(playlist));
+    }
+
+    function renderPlaylist(currentTitle) {
+      playlistEl.innerHTML = "";
+      playlist.forEach((track) => {
+        const item = document.createElement("div");
+        item.className = "track" + (track.title === currentTitle ? " active" : "");
+
+        let marker = null;
+        if (track.title === currentTitle) {
+          marker = document.createElement("span");
+          marker.style.display = "inline-block";
+          marker.style.width = "12px";
+          marker.style.height = "12px";
+          marker.style.backgroundColor = "yellow";
+          marker.style.borderRadius = "50%";
+          marker.style.marginRight = "8px";
+          marker.style.flexShrink = "0";
+          marker.title = "Traccia corrente";
+        }
+
+        const img = document.createElement("img");
+        img.src = track.cover || defaultImage;
+
+        const info = document.createElement("div");
+        info.className = "info";
+        info.innerHTML = `<strong>${track.title}</strong><span style="color:#aaa">${track.artist || ""}</span>`;
+
+        if (marker) item.appendChild(marker);
+        item.appendChild(img);
+        item.appendChild(info);
+        playlistEl.appendChild(item);
+      });
+
+      playlistEl.scrollTop = playlistEl.scrollHeight;
+    }
+
+    function restartStream() {
+      console.warn("Tentativo di riavvio dello stream tra 0 secondi...");
+      setTimeout(() => {
+        const newAudio = new Audio(streamUrl);
+        newAudio.volume = volumeSlider.value;
+
+        newAudio.onerror = audio.onerror;
+        newAudio.onended = audio.onended;
+
+        if (!audio.paused) {
+          newAudio.play().then(() => {
+            playstopBtn.textContent = "⏸";
+          }).catch(err => {
+            console.warn("Errore durante il riavvio automatico:", err);
+          });
+        }
+
+        audio = newAudio;
+      }, 5000);
+    }
+
+    audio.onerror = () => {
+      console.error("Errore nello stream audio.");
+      restartStream();
+    };
+
+    audio.onended = () => {
+      console.warn("Stream terminato.");
+      restartStream();
+    };
+
+    fetchNowPlaying();
+
+    window.addEventListener("load", () => {
+      audio.play().then(() => {
+        playstopBtn.textContent = "⏸";
+      }).catch((err) => {
+        console.warn("Autoplay bloccato dal browser:", err);
+      });
+    });
+
+    setInterval(fetchNowPlaying, 20000);
+  </script>
+</body>
+</html>
