@@ -1,0 +1,57 @@
+<span style="" gothic="" copperplate="">
+  <font color="#FAF7F7">
+    <!-- BEGINS: AUTO-GENERATED MUSES RADIO PLAYER CODE -->
+    <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script> 
+    <script type="text/javascript">
+      //<![CDATA[
+      MRP.insert({
+        'url':'https://stream-154.zeno.fm/h0vgpbvuyx4tv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJoMHZncGJ2dXl4NHR2IiwiaG9zdCI6InN0cmVhbS0xNTQuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6IktHUXFTcnlYVGp5Z1lzcENSYzdSQVEiLCJpYXQiOjE3MzUxNTQ5NDMsImV4cCI6MTczNTE1NTAwM30.Z9ywYUJrocGIwqwu09-mTiJLl4L4U2qUmAbxHHT6sOs',
+        'lang':'it',
+        'codec':'mp3',
+        'volume':100,
+        'autoplay':true,
+        'forceHTML5':true,
+        'jsevents':true,
+        'buffering':0,
+        'title':'RadioCalabriaMiaWeb',
+        'wmode':'transparent',
+        'skin':'miniradio',
+        'width':289,
+        'height':112
+      });
+
+      // Riavvio automatico dello streaming in caso di errore o fine
+      function setupAutoRestart() {
+        const interval = 5000; // 5 secondi
+        const retryStream = () => {
+          const audio = document.querySelector('audio');
+          if (audio) {
+            audio.load();
+            audio.play().catch(() => {
+              setTimeout(retryStream, interval);
+            });
+          }
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const checkAudio = setInterval(() => {
+            const audio = document.querySelector('audio');
+            if (audio) {
+              clearInterval(checkAudio);
+              audio.onerror = () => {
+                setTimeout(retryStream, interval);
+              };
+              audio.onended = () => {
+                setTimeout(retryStream, interval);
+              };
+            }
+          }, 500);
+        });
+      }
+
+      setupAutoRestart();
+      //]]>
+    </script>
+    <!-- ENDS: AUTO-GENERATED MUSES RADIO PLAYER CODE -->
+  </font>
+</span>
