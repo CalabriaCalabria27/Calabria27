@@ -1,0 +1,25 @@
+
+<!-- START: Live metadata via EventSource -->
+<div style="margin-top:20px; font-size:20px; color:#0000fff; font-family: Playball;">
+  <span id="npArtist"></span> – <span id="npSong"></span>
+</div>
+<script>
+  const streamId = '3st3d3pwa0hvv';
+  const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
+  const artistEl = document.getElementById('npArtist');
+  const songEl = document.getElementById('npSong');
+
+  const es = new EventSource(metadataUrl);
+  es.onmessage = event => {
+    try {
+      const data = JSON.parse(event.data);
+      const [artist, title] = data.streamTitle.split(' – ');
+      artistEl.textContent = artist?.trim() || '';
+      songEl.textContent = title?.trim() || data.streamTitle;
+    } catch (err) {
+      console.error('Errore parsing metadata:', err, event.data);
+    }
+  };
+  es.onerror = err => console.error('SSE error:', err);
+</script>
+<!-- END: Live metadata via EventSource -->
