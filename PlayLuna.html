@@ -43,6 +43,7 @@
     });
 </script>
 <!-- START: Quadrato Drag & Drop + Copertina + Titolo Scorrevole con Barre Fisse -->
+<!-- START: Quadrato Drag & Drop + Copertina + Titolo Scorrevole con Barre Fisse -->
 <style>
   :root {
     --ticker-font: 'Arial', sans-serif;
@@ -59,10 +60,10 @@
   }
 
   #coverBox {
-    width: 420px;
+    width: 460px;
     max-width: 90vw;
-    height: 340px;
-    max-height: 45vh;
+    height: 370px;
+    max-height: 50vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -151,8 +152,8 @@
 
   @media screen and (max-width: 768px) {
     #coverBox {
-      width: 400px;
-      height: 320px;
+      width: 420px;
+      height: 350px;
       max-width: 90vw;
       max-height: 45vh;
       top: 50px;
@@ -187,10 +188,10 @@
 
   @media screen and (max-width: 480px) {
     #coverBox {
-      width: 270px;
-      height: 220px;
+      width: 300px;
+      height: 250px;
       max-width: 90vw;
-      max-height: 35vh;
+      max-height: 40vh;
       top: 40px;
     }
 
@@ -223,8 +224,8 @@
 
   @media screen and (max-width: 320px) {
     #coverBox {
-      width: 240px;
-      height: 190px;
+      width: 270px;
+      height: 220px;
       top: 30px;
     }
 
@@ -268,7 +269,7 @@
 </div>
 
 <script>
-  const DEV_MODE = true;
+  const DEV_MODE = false;
   const streamId = 'rtndtqysyq5tv';
   const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
 
@@ -349,6 +350,7 @@
       const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(artist + ' ' + title)}&limit=1`);
       const data = await response.json();
       if (data.results && data.results.length > 0) {
+        // immagine più grande (300x300 già c'è) ma qui non serve cambiare
         return data.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
       }
     } catch (e) {
@@ -394,6 +396,7 @@
   es.onerror = err => console.error('SSE error:', err);
 </script>
 <!-- END: Quadrato Drag & Drop + Copertina + Titolo Scorrevole con Barre Fisse -->
+
 
 </body>
 </html>
