@@ -90,7 +90,9 @@
     #musesplayer {
       width: 386px;
       height: 47px;
+      margin: 0 auto; /* CENTRATO */
       margin-top: 0;
+      display: block;
     }
   </style>
 </head>
@@ -111,7 +113,7 @@
       <div class="bar" aria-hidden="true">|</div>
     </div>
 
-    <!-- Player Muses -->
+    <!-- Player Muses centrato -->
     <div id="musesplayer">
       <!-- Player inserito via script -->
     </div>
@@ -133,13 +135,13 @@
       'skin':'wmp',
       'width':386,
       'height':47,
-      'container':'musesplayer'  // important: target div to insert player
+      'container':'musesplayer'  // importante: target div per inserire il player
     });
   </script>
 
   <!-- Script per copertina e titolo -->
   <script>
-    const streamId = '3st3d3pwa0hvv'; // Cambia con il tuo stream ID se vuoi
+    const streamId = 't2l8dpcdouitv'; // Cambia con il tuo stream ID se vuoi
     const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
     const titleEl = document.getElementById('npTitle');
     const cover = document.getElementById('coverArt');
