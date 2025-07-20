@@ -14,14 +14,15 @@
 
   /* Contenitore generale per allineare tutto a sinistra */
   #mainContainer {
-    width: 386px;  /* larghezza del player */
+    width: 316px;  /* larghezza adattata alla copertina + bordo */
     margin: 0;
     text-align: left;
   }
 
-  /* Wrapper copertina con bordo colore player */
+  /* Wrapper copertina con bordo ridotto e centratura */
   #coverWrapper {
-    width: 386px;
+    width: 316px;
+    height: 316px;
     margin: 0 auto 10px auto; /* centra orizzontalmente, margine sotto */
     background: transparent;
     border: 2px solid #444444; /* bordo colore player */
@@ -96,7 +97,7 @@
 
   /* CONTENITORE PLAYER ALLINEATO A SINISTRA */
   #musesplayer {
-    width: 386px;
+    width: 316px; /* stesso della copertina */
     margin: 0;
     text-align: left;
   }
@@ -180,7 +181,7 @@
     'welcome': 'Benvenuti',
     'wmode': 'transparent',
     'skin': 'wmp',
-    'width': 386,
+    'width': 316,
     'height': 47,
     'container': 'musesplayer'
   });
