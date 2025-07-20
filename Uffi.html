@@ -6,6 +6,12 @@
 <title>Radio Player con Copertine e Titoli</title>
 
 <style>
+  body {
+    background: transparent;
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+
   .now-playing-box {
     margin: 20px 0;
     font-size: 20px;
@@ -76,6 +82,13 @@
     transition: opacity 0.6s ease-in-out;
     border-radius: 8px;
   }
+
+  /* CONTENITORE PLAYER CENTRATO */
+  #musesplayer {
+    width: 386px;      /* stessa larghezza del player */
+    margin: 0 auto;    /* margine auto per centrare */
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -94,10 +107,8 @@
   <div class="bar">|</div>
 </div>
 
-<!-- PLAYER MUSES CENTRATO CON <center> -->
-<center>
-  <div id="musesplayer"></div>
-</center>
+<!-- CONTENITORE PLAYER MUSES CENTRATO -->
+<div id="musesplayer"></div>
 
 <!-- SCRIPT PER AGGIORNARE TITOLI E COPERTINE -->
 <script>
