@@ -14,15 +14,15 @@
 
     #mainContainer {
       width: 386px;
-      margin: 0 auto;
-      text-align: center;
+      margin: 0;
+      text-align: left;
     }
 
     /* COPERTINA + BORDO */
     #coverWrapper {
       width: 300px;
       height: 300px;
-      margin: 0 auto 10px auto;
+      margin-bottom: 10px;
       border: 4px solid #3a3a3a; /* colore bordo come player */
       border-radius: 10px;
       background: transparent;
@@ -49,18 +49,17 @@
       color: red;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       width: 100%;
       height: 48px;
       overflow: hidden;
-      padding: 0;
       background: transparent;
     }
 
     .bar {
       font-size: 26px;
       font-weight: bold;
-      color: #3a3a3a; /* colore sbarre come player */
+      color: #3a3a3a; /* colore barre come player */
       user-select: none;
       padding: 0 12px;
       flex-shrink: 0;
@@ -98,8 +97,8 @@
     /* PLAYER MUSES */
     #musesplayer {
       width: 386px;
-      margin: 0 auto;
-      text-align: center;
+      margin-top: 10px;
+      text-align: left;
     }
   </style>
 </head>
@@ -111,7 +110,7 @@
       <img id="coverArt" src="https://i.postimg.cc/G2LZ5PN8/sssssssssssssssssssss.png" alt="Cover Art" />
     </div>
 
-    <!-- TITOLI CHE SCORRONO -->
+    <!-- TITOLI -->
     <div class="now-playing-box">
       <div class="bar">|</div>
       <div class="scroll-container">
@@ -120,11 +119,11 @@
       <div class="bar">|</div>
     </div>
 
-    <!-- PLAYER MUSES -->
+    <!-- PLAYER -->
     <div id="musesplayer"></div>
   </div>
 
-  <!-- SCRIPT: Recupero Titoli + Copertina iTunes -->
+  <!-- SCRIPT TITOLI E COVER -->
   <script>
     const streamId = 't2l8dpcdouitv';
     const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
@@ -169,7 +168,7 @@
     es.onerror = err => console.error('SSE error:', err);
   </script>
 
-  <!-- SCRIPT: PLAYER MUSES -->
+  <!-- SCRIPT PLAYER MUSES -->
   <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script>
   <script type="text/javascript">
     MRP.insert({
