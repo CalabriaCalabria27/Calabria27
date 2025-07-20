@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Radio Player con Copertina e Titolo</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: transparent;
+      font-family: Playball, cursive;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Copertina */
+    .cover-box {
+      width: 120px;
+      height: 120px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border: 2px solid #444;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .cover-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Titolo scorrevole */
+    .now-playing-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .bar {
+      font-size: 32px;
+      font-weight: bold;
+      color: red;
+      user-select: none;
+      padding: 0 15px;
+      flex-shrink: 0;
+      line-height: 48px;
+      text-shadow: 0 0 3px black;
+    }
+    .scroll-container {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .scrolling-text {
+      position: absolute;
+      white-space: nowrap;
+      will-change: transform;
+      animation: scroll-left 12s linear infinite;
+      color: red;
+      font-size: 20px;
+      line-height: 48px;
+      padding: 0 5px;
+    }
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* Player Muses centrato */
+    #musesplayer {
+      width: 386px;
+      height: 47px;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" role="main">
+    <!-- Copertina -->
+    <div class="cover-box" aria-label="Copertina album">
+      <img id="coverArt" src="https://i.postimg.cc/G2LZ5PN8/sssssssssssssssssssss.png" alt="Copertina brano" />
+    </div>
+
+    <!-- Titolo scorrevole con sbarre -->
+    <div class="now-playing-box" role="region" aria-label="Titolo brano in riproduzione">
+      <div class="bar" aria-hidden="true">|</div>
+      <div class="scroll-container">
+        <div class="scrolling-text" id="npTitle" aria-live="polite" aria-atomic="true">Caricamento…</div>
+      </div>
+      <div class="bar" aria-hidden="true">|</div>
+    </div>
+
+    <!-- Player Muses -->
+    <div id="musesplayer">
+      <!-- Player inserito via script -->
+    </div>
+  </div>
+
+  <!-- Codice player Muses -->
+  <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script>
+  <script type="text/javascript">
+    MRP.insert({
+      'url':'https://stream-179.zeno.fm/t2l8dpcdouitv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJ0Mmw4ZHBjZG91aXR2IiwiaG9zdCI6InN0cmVhbS0xNzkuemVuby5mbSIsInRtIjpmYWxzZSwicnR0bCI6NSwianRpIjoidmNlUUQxemxSM091WUUzaXNPbDlUZyIsImlhdCI6MTc1MzA0ODA4MywiZXhwIjoxNzUzMDQ4MTQzfQ.ySf3UoRWxgUDQm0veN-_NV9vJI8-Xx2A3qdI1ulVHY4',
+      'volume':100,
+      'autoplay':true,
+      'forceHTML5':true,
+      'jsevents':true,
+      'buffering':0,
+      'title':'RadioVivaForever',
+      'welcome':'Benvenuti',
+      'wmode':'transparent',
+      'skin':'wmp',
+      'width':386,
+      'height':47,
+      'container':'musesplayer'  // important: target div to insert player
+    });
+  </script>
+
+  <!-- Script per copertina e titolo -->
+  <script>
+    const streamId = '3st3d3pwa0hvv'; // Cambia con il tuo stream ID se vuoi
+    const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
+    const titleEl = document.getElementById('npTitle');
+    const cover = document.getElementById('coverArt');
+    const defaultCover = "https://i.postimg.cc/G2LZ5PN8/sssssssssssssssssssss.png";
+
+    const es = new EventSource(metadataUrl);
+
+    es.onmessage = async (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        const rawTitle = data.streamTitle.trim();
+        titleEl.textContent = rawTitle;
+
+        if (rawTitle.includes('-')) {
+          const [artist, track] = rawTitle.split('-').map(s => s.trim());
+          const query = encodeURIComponent(`${artist} ${track}`);
+          const res = await fetch(`https://itunes.apple.com/search?term=${query}&limit=1`);
+          const json = await res.json();
+
+          if (json.results.length > 0) {
+            const albumArt = json.results[0].artworkUrl100.replace('100x100bb', '300x300bb');
+            transitionCover(albumArt);
+          } else {
+            transitionCover(defaultCover);
+          }
+        } else {
+          transitionCover(defaultCover);
+        }
+      } catch (err) {
+        console.error("Errore metadati:", err);
+        transitionCover(defaultCover);
+      }
+    };
+
+    function transitionCover(newSrc) {
+      cover.style.opacity = "0";
+      setTimeout(() => {
+        cover.src = newSrc;
+        cover.style.opacity = "1";
+      }, 200);
+    }
+
+    es.onerror = err => console.error('Errore SSE:', err);
+  </script>
+
+</body>
+</html>
