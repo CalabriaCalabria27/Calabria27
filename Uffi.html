@@ -19,11 +19,15 @@
     text-align: left;
   }
 
-  /* Wrapper copertina con larghezza fissa e centratura dell’immagine */
+  /* Wrapper copertina con bordo colore player */
   #coverWrapper {
     width: 386px;
     margin: 0 auto 10px auto; /* centra orizzontalmente, margine sotto */
     background: transparent;
+    border: 2px solid #444444; /* bordo colore player */
+    border-radius: 8px;
+    padding: 8px;
+    box-sizing: border-box;
   }
 
   #coverArt {
@@ -31,7 +35,7 @@
     height: 300px;
     display: block;
     margin: 0 auto;  /* centra l’immagine nel wrapper */
-    border-radius: 8px;
+    border-radius: 4px;
     object-fit: cover;
     opacity: 1;
     transition: opacity 0.6s ease-in-out;
@@ -41,7 +45,7 @@
     margin: 20px 0;
     font-size: 20px;
     font-family: Playball, cursive;
-    color: red;
+    color: red; /* testo rosso */
     display: flex;
     align-items: center;
     justify-content: flex-start; /* tutto a sinistra */
@@ -55,7 +59,7 @@
   .bar {
     font-size: 26px;
     font-weight: bold;
-    color: red;
+    color: #444444; /* sbarre colore player */
     user-select: none;
     padding: 0 12px;
     flex-shrink: 0;
