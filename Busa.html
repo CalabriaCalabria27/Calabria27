@@ -19,7 +19,7 @@
     position: relative;
     background: #ffffff;
     border-radius: 16px;
-    padding: 4px;
+    padding: 4px; /* spazio per cornice */
     overflow: hidden;
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
     box-sizing: border-box;
@@ -28,6 +28,7 @@
   }
   #extassisnetwork .luna-cover { display: none !important; }
 
+  /* Cornice arcobaleno animata sul player */
   #extassisnetwork::before {
     content: "";
     position: absolute;
@@ -51,6 +52,7 @@
     100% { background-position: 100% 50%; }
   }
 
+  /* Sfondo sfocato che copre tutto il player */
   #coverBlur {
     position: absolute;
     top: 0;
@@ -64,6 +66,7 @@
     pointer-events: none;
   }
 
+  /* Nome radio centrato sotto la cover */
   #extassisnetwork .luna-radioname {
     display: block !important;
     position: absolute;
@@ -82,6 +85,7 @@
 
   #extassisnetwork .luna-visualizer { display: none !important; }
 
+  /* Cover principale con bordo arcobaleno solo contorno */
   #coverArt {
     width: 200px;
     height: 200px;
@@ -94,12 +98,15 @@
     transition: opacity 0.5s ease;
     z-index: 10;
     box-sizing: border-box;
+
+    /* bordo arcobaleno animato */
     border: 4px solid;
     border-image: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red) 1;
     border-image-slice: 1;
     animation: rainbowBorder 15s linear infinite;
   }
 
+  /* Titolo scorrevole sotto il nome della radio */
   #npTitle {
     position: absolute;
     top: 270px;
@@ -137,6 +144,7 @@
     z-index: 30;
   }
 
+  /* Contenitore effetti particellari sopra il player, sotto la cover */
   #effectsContainer {
     pointer-events: none;
     position: absolute;
@@ -144,9 +152,10 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: 5;
+    z-index: 5; /* modificato da 15 a 5 per stare sotto la cover */
   }
 
+  /* Effetti particellari */
   .particle {
     position: absolute;
     background: white;
@@ -160,6 +169,7 @@
     border-radius: 2px;
   }
 
+  /* Animazione lenta e delicata per il tasto extassisnetworkiconlive */
   @keyframes slowBlink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -202,17 +212,75 @@
     autoplay: true
   });
 
-  // Forza autoplay + volume max lato JS
-  $(window).on('load', function(){
-    let audioEl = $("#extassisnetwork").find("audio").get(0);
-    if(audioEl){
-      audioEl.volume = 1.0;
-      audioEl.play().catch(e => console.log("Autoplay bloccato dal browser:", e));
+  /* ===========================
+     HELP: FORZA AUTOPLAY ROBUSTO
+     - Non altera il resto del codice
+     - Cerca l'elemento <audio> creato da lunaradio
+     - Imposta muted=false, volume=1.0 e prova play() ripetutamente
+     - Fallback: al primo gesto utente forza play/unmute
+     =========================== */
+  (function forceAutoplayHelper(){
+    const intervalMs = 500;
+    const maxAttempts = 40; // 40 * 500ms = 20s max
+    let attempts = 0;
+    const timer = setInterval(() => {
+      attempts++;
+      // cerco l'audio specifico del player; se non trovato, prendo il primo audio nella pagina
+      let audio = document.querySelector('#extassisnetwork audio') || document.querySelector('audio');
+      if(!audio){
+        if(attempts >= maxAttempts){
+          clearInterval(timer);
+          console.warn('Autoplay helper: audio element non trovato dopo tentativi');
+        }
+        return;
+      }
+
+      // assicurati che non sia in mute e volume al massimo
+      try { audio.muted = false; } catch(e){}
+      try { audio.volume = 1.0; } catch(e){}
+
+      // prova a riprodurre; play() restituisce promise in browser moderni
+      try {
+        const playPromise = audio.play();
+        if(playPromise !== undefined){
+          playPromise.then(() => {
+            console.log('Autoplay avviato (helper)');
+            clearInterval(timer);
+          }).catch(err => {
+            console.warn('Autoplay helper: play() rifiutato, retrying...', err);
+            if(attempts >= maxAttempts) clearInterval(timer);
+          });
+        } else {
+          // browser vecchio che non ritorna promise
+          console.log('Autoplay helper: play() invocato (no promise)');
+          clearInterval(timer);
+        }
+      } catch(e){
+        console.error('Autoplay helper: errore su play():', e);
+        if(attempts >= maxAttempts) clearInterval(timer);
+      }
+    }, intervalMs);
+
+    // fallback: al primo gesto dell'utente prova subito a forzare play/unmute
+    function gestureHandler(){
+      let audio = document.querySelector('#extassisnetwork audio') || document.querySelector('audio');
+      if(audio){
+        try { audio.muted = false; } catch(e){}
+        try { audio.volume = 1.0; } catch(e){}
+        audio.play().catch(()=>{});
+      }
+      ['click','touchstart','keydown'].forEach(ev => document.removeEventListener(ev, gestureHandler));
     }
-  });
+    ['click','touchstart','keydown'].forEach(ev => document.addEventListener(ev, gestureHandler, {passive:true}));
+  })();
+  /* ===========================
+     fine helper autoplay
+     =========================== */
 
   $(document).ready(function(){
     const container = $("#extassisnetwork");
+
+    // Sfondo sfocato full player
     const coverBlur = $('<img>', {
       id: 'coverBlur',
       src: "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png",
@@ -220,6 +288,7 @@
     });
     container.append(coverBlur);
 
+    // Cover principale (verrà aggiornata dinamicamente)
     const coverArt = $('<img>', {
       id: 'coverArt',
       src: "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png",
@@ -227,16 +296,21 @@
     });
     container.append(coverArt);
 
+    // Titolo scorrevole
     const titleEl = $('<h3>', {
       id: 'npTitle',
       html: '<span>Loading...</span>'
     });
     container.append(titleEl);
 
-    const effectsContainer = $('<div>', { id: 'effectsContainer' });
+    // Contenitore effetti particellari (quadrati + puntini)
+    const effectsContainer = $('<div>', {
+      id: 'effectsContainer'
+    });
     container.append(effectsContainer);
 
     const defaultCover = "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png";
+
     const streamId = 'rtndtqysyq5tv';
     const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
 
@@ -279,20 +353,23 @@
 
     es.onerror = err => console.error('SSE error:', err);
 
+    // --- Effetti quadrati e puntini bianchi ---
+
     let animationRunning = false;
     const particles = [];
     const maxParticles = 40;
 
+    // Funzione per creare particella (dot o square)
     function createParticle() {
       const el = $('<div class="particle"></div>');
       const isDot = Math.random() < 0.5;
       if (isDot) {
         el.addClass('dot');
-        const size = 2 + Math.random() * 3;
+        const size = 2 + Math.random() * 3; // 2-5px
         el.css({width: size + 'px', height: size + 'px'});
       } else {
         el.addClass('square');
-        const size = 3 + Math.random() * 5;
+        const size = 3 + Math.random() * 5; // 3-8px
         el.css({width: size + 'px', height: size + 'px'});
       }
       effectsContainer.append(el);
@@ -310,23 +387,29 @@
       particles.forEach(p => {
         p.x += p.speedX;
         p.y += p.speedY;
+
+        // Riflettiamo ai bordi
         if (p.x < 0) { p.x = 0; p.speedX *= -1; }
         if (p.x > effectsContainer.width() - p.size) { p.x = effectsContainer.width() - p.size; p.speedX *= -1; }
         if (p.y < 0) { p.y = 0; p.speedY *= -1; }
         if (p.y > effectsContainer.height() - p.size) { p.y = effectsContainer.height() - p.size; p.speedY *= -1; }
+
         p.el.css({left: p.x + 'px', top: p.y + 'px'});
       });
     }
 
+    // Funzione animazione
     function animateParticles() {
       if (!animationRunning) return;
       updateParticles();
       requestAnimationFrame(animateParticles);
     }
 
+    // Evento per avviare animazione solo al click sul pulsante con id #extassisnetworkbuttonanalyzer
     $(document).on('click', '#extassisnetworkbuttonanalyzer', () => {
       if(animationRunning) return;
       animationRunning = true;
+      // Crea particelle
       for(let i=0; i<maxParticles; i++){
         particles.push(createParticle());
       }
