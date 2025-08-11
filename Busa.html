@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nuovo Player Luna Player</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam&display=swap" rel="stylesheet" />
+<style>
+  body {
+    background: #fff;
+    font-family: 'Be Vietnam', sans-serif;
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    cursor: pointer; /* Indica che si può cliccare */
+  }
+  #extassisnetwork {
+    width: 360px;
+    height: 450px;
+    position: relative;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    background-clip: padding-box;
+    background-origin: border-box;
+  }
+  #extassisnetwork .luna-cover { display: none !important; }
+
+  /* Cornice arcobaleno animata sul player */
+  #extassisnetwork::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 16px;
+    padding: 4px;
+    background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+    background-size: 1400% 1400%;
+    animation: rainbowBorder 15s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 100;
+  }
+  @keyframes rainbowBorder {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+
+  #coverBlur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(20px);
+    opacity: 0.25;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  #extassisnetwork .luna-radioname {
+    display: block !important;
+    position: absolute;
+    top: 230px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+    font-family: 'Be Vietnam', sans-serif;
+    z-index: 20;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  #extassisnetwork .luna-visualizer { display: none !important; }
+
+  #coverArt {
+    width: 200px;
+    height: 200px;
+    border-radius: 14px;
+    object-fit: cover;
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.5s ease;
+    z-index: 10;
+    box-sizing: border-box;
+    border: 4px solid;
+    border-image: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red) 1;
+    border-image-slice: 1;
+    animation: rainbowBorder 15s linear infinite;
+  }
+
+  #npTitle {
+    position: absolute;
+    top: 270px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 320px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #000;
+    text-align: center;
+    font-family: 'Be Vietnam', sans-serif;
+    padding: 0 10px;
+    z-index: 20;
+    box-sizing: border-box;
+  }
+  #npTitle span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 12s linear infinite;
+    text-align: left;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  #extassisnetwork .luna-volume {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+  }
+
+  #effectsContainer {
+    pointer-events: none;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .particle {
+    position: absolute;
+    background: white;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+  .dot { border-radius: 50%; }
+  .square { border-radius: 2px; }
+
+  @keyframes slowBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  #extassisnetworkiconlive { animation: slowBlink 3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div id="extassisnetwork"></div>
+
+<script src="https://calabriacalabria27.github.io/Calabria27/jquery-3.2.1.min.js"></script>
+<script src="https://calabriacalabria27.github.io/Calabria27/luna.js"></script>
+
+<script>
+  function startPlayer() {
+    $("#extassisnetwork").lunaradio({
+      streamurl: "https://stream-174.zeno.fm/rtndtqysyq5tv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJydG5kdHF5c3lxNXR2IiwiaG9zdCI6InN0cmVhbC0xNzQuemVuby5mbSIsInRtIjpmYWxzZSwicnR0IjoxMCwianRpIjoieXRtVEZ1SThTQWVBLW9iMkswY25hUSIsImlhdCI6MTc1NDg2MTY0NSwiZXhwIjoxNzU0ODYyMjA1fQ.P-ifstwPDWTAbL6lKKsSf_LvQxlOidHyux8kephG3O",
+      radioname: "RαdıoCαlαbrıα27",
+      coverimage: "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png",
+      onlycoverimage: false,
+      userinterface: "big",
+      backgroundcolor: "#ffffff",
+      fontcolor: "#000000",
+      hightlightcolor: "#969696",
+      fontname: "Be Vietnam",
+      googlefont: "Be Vietnam",
+      fontratio: "0.4",
+      scroll: "true",
+      coverstyle: "static",
+      usevisualizer: "false",
+      streamtype: "shoutcast2",
+      shoutcastpath: "/stream",
+      shoutcastid: "1",
+      metadatainterval: "5000",
+      volume: "100",
+      usestreamcorsproxy: "true",
+      autoplay: "true"
+    });
+  }
+
+  // Avvio player al primo clic dell’utente
+  document.addEventListener('click', function initOnce() {
+    startPlayer();
+    document.removeEventListener('click', initOnce);
+  });
+
+  $(document).ready(function(){
+    const container = $("#extassisnetwork");
+    const coverBlur = $('<img>', { id: 'coverBlur', src: "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png", css: {opacity: 0.25} });
+    const coverArt = $('<img>', { id: 'coverArt', src: "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png", css: {opacity: 1} });
+    const titleEl = $('<h3>', { id: 'npTitle', html: '<span>Loading...</span>' });
+    const effectsContainer = $('<div>', { id: 'effectsContainer' });
+
+    container.append(coverBlur, coverArt, titleEl, effectsContainer);
+
+    const defaultCover = "https://i.postimg.cc/pdbj1vg7/ddddeeeeeeeeeeeeeee.png";
+    const streamId = 'rtndtqysyq5tv';
+    const metadataUrl = `https://api.zeno.fm/mounts/metadata/subscribe/${streamId}`;
+
+    const es = new EventSource(metadataUrl);
+    es.onmessage = async event => {
+      try {
+        const data = JSON.parse(event.data);
+        const rawTitle = data.streamTitle.trim();
+        titleEl.html('<span>' + rawTitle + '</span>');
+
+        if(rawTitle.includes('-')){
+          const [artist, track] = rawTitle.split('-').map(s => s.trim());
+          const query = encodeURIComponent(`${artist} ${track}`);
+          const res = await fetch(`https://itunes.apple.com/search?term=${query}&limit=1`);
+          const json = await res.json();
+          if(json.results.length > 0){
+            const albumArt = json.results[0].artworkUrl100.replace('100x100bb', '200x200bb');
+            transitionCover(albumArt);
+          } else {
+            transitionCover(defaultCover);
+          }
+        } else {
+          transitionCover(defaultCover);
+        }
+      } catch {
+        transitionCover(defaultCover);
+      }
+    };
+
+    function transitionCover(newSrc){
+      coverArt.css('opacity', '0');
+      coverBlur.css('opacity', '0');
+      setTimeout(() => {
+        coverArt.attr('src', newSrc);
+        coverBlur.attr('src', newSrc);
+        coverArt.css('opacity', '1');
+        coverBlur.css('opacity', '0.25');
+      }, 500);
+    }
+
+    es.onerror = err => console.error('SSE error:', err);
+
+    // Effetti particellari
+    let animationRunning = false;
+    const particles = [];
+    const maxParticles = 40;
+
+    function createParticle() {
+      const el = $('<div class="particle"></div>');
+      const isDot = Math.random() < 0.5;
+      const size = isDot ? 2 + Math.random() * 3 : 3 + Math.random() * 5;
+      el.addClass(isDot ? 'dot' : 'square').css({width: size + 'px', height: size + 'px'});
+      effectsContainer.append(el);
+      return {
+        el: el,
+        x: Math.random() * effectsContainer.width(),
+        y: Math.random() * effectsContainer.height(),
+        size: size,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3
+      };
+    }
+
+    function updateParticles() {
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        if (p.x < 0 || p.x > effectsContainer.width() - p.size) p.speedX *= -1;
+        if (p.y < 0 || p.y > effectsContainer.height() - p.size) p.speedY *= -1;
+        p.el.css({left: p.x + 'px', top: p.y + 'px'});
+      });
+    }
+
+    function animateParticles() {
+      if (!animationRunning) return;
+      updateParticles();
+      requestAnimationFrame(animateParticles);
+    }
+
+    $(document).on('click', '#extassisnetworkbuttonanalyzer', () => {
+      if(animationRunning) return;
+      animationRunning = true;
+      for(let i=0; i<maxParticles; i++) particles.push(createParticle());
+      animateParticles();
+    });
+  });
+</script>
+
+</body>
+</html>
