@@ -105,7 +105,7 @@
   /* Contenitore player Muses subito sotto il testo scorrevole */
   #musesPlayerContainer {
     position: fixed;
-    top: calc(50% + 190px); /* 140px testo + 36px altezza testo + 14px margine */
+    top: calc(50% + 190px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 10000;
@@ -116,7 +116,7 @@
 
 <!-- START: Quadrato centrale grande con cover e bordo rosso-bianco -->
 <div id="coverBox">
-  <img id="artistArt" src="" alt="Artist Cover" />
+  <img id="artistArt" src="https://i.postimg.cc/V6YSYB9Z/0f0a2b4b459f8a5e0cd5362707e5bb90.jpg" alt="Artist Cover" />
 </div>
 
 <div id="textBar">
@@ -165,7 +165,7 @@
 
       if (json.results.length > 0 && json.results[0].artworkUrl100) {
         const artwork = json.results[0].artworkUrl100.replace('100x100', '300x300');
-        artistArtEl.src = artwork;
+        artistArtEl.src = artwork || defaultCover;
       } else {
         artistArtEl.src = defaultCover;
       }
@@ -175,7 +175,10 @@
     }
   };
 
-  es.onerror = err => console.error('SSE error:', err);
+  es.onerror = err => {
+    console.error('SSE error:', err);
+    artistArtEl.src = defaultCover;
+  };
 </script>
 <!-- END: Quadrato centrale grande con copertina e bordo rosso-bianco -->
 
