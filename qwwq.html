@@ -9,9 +9,9 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden;
     font-family: Playball, cursive;
-    background: none;
+    background: #000;
+    overflow: hidden;
   }
 
   /* QUADRATO CENTRALE GRANDE */
@@ -102,10 +102,10 @@
     100% { transform: translateX(-100%); }
   }
 
-  /* Contenitore player Muses subito sotto il testo scorrevole */
+  /* Contenitore player Muses sotto il testo scorrevole */
   #musesPlayerContainer {
     position: fixed;
-    top: calc(50% + 190px);
+    top: calc(50% + 190px); /* posizione sotto il testo scorrevole */
     left: 50%;
     transform: translateX(-50%);
     z-index: 10000;
@@ -114,11 +114,12 @@
 </head>
 <body>
 
-<!-- START: Quadrato centrale grande con cover e bordo rosso-bianco -->
+<!-- QUADRATO CENTRALE CON COPERTINA -->
 <div id="coverBox">
   <img id="artistArt" src="https://i.postimg.cc/V6YSYB9Z/0f0a2b4b459f8a5e0cd5362707e5bb90.jpg" alt="Artist Cover" />
 </div>
 
+<!-- TESTO SCORREVOLE -->
 <div id="textBar">
   <span id="leftBar">|</span>
   <div id="textWrapper">
@@ -180,10 +181,10 @@
     artistArtEl.src = defaultCover;
   };
 </script>
-<!-- END: Quadrato centrale grande con copertina e bordo rosso-bianco -->
 
-<!-- START: MUSES RADIO PLAYER -->
-<div id="musesPlayerContainer">
+<!-- PLAYER MUSES RADIO -->
+<div id="musesPlayerContainer"></div>
+
 <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script>
 <script type="text/javascript">
 MRP.insert({
@@ -211,12 +212,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           audioEl.load();
           audioEl.play().catch(e => console.error('Errore riavvio stream:', e));
-        }, 1000); // riavvio dopo 1 secondo
+        }, 1000);
       };
       audioEl.onerror = restartStream;
       audioEl.onended = restartStream;
-
-      // Assicura autoplay anche su browser moderni
       audioEl.play().catch(e => console.log('Autoplay bloccato dal browser:', e));
     } else {
       setTimeout(checkAudio, 500);
@@ -225,9 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
   checkAudio();
 });
 </script>
-</div>
-<!-- END: MUSES RADIO PLAYER -->
 
 </body>
 </html>
-
