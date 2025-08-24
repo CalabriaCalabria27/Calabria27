@@ -187,7 +187,7 @@
 <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script>
 <script type="text/javascript">
 MRP.insert({
-  'url':'https://stream-174.zeno.fm/rtndtqysyq5tv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJydG5kdHF5c3lxNXR2IiwiaG9zdCI6InN0cmVhbS0xNzQuemVuby5mbSIsInRtIjpmYWxzZSwicnR0bCI6NSwianRpIjoiZGZoUEU0RTlTZ21yenZrWmwwLTczQSIsImlhdCI6MTc1NjA3NDYzMywiZXhwIjoxNzU2MDc0NjkzfQ.On1DkIOsdSTTUWgg7CeHNMCpuolBiRkQyXhBwEv6i5w',
+  'url':'https://stream-174.zeno.fm/rtndtqysyq5tv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJydG5kdHF5c3lxNXR2IiwiaG9zdCI6InN0cmVhbS0xNzQuemVuby5mbSIsInRtIjpmYWxzZSwicnR0IjoiNSIsImp0aSI6IkRmaFBFNEU5U2dtenJ2a1psMC03M0EiLCJpYXQiOjE3NTYwNzQ2MzMsImV4cCI6MTc1NjA3NDY5M30.On1DkIOsdSTTUWgg7CeHNMCpuolBiRkQyXhBwEv6i5w',
   'lang':'it',
   'volume':100,
   'autoplay':true,
@@ -200,6 +200,26 @@ MRP.insert({
   'skin':'arvyskin',
   'width':560,
   'height':30
+});
+
+// Rilevamento errori e riavvio automatico
+document.addEventListener('DOMContentLoaded', () => {
+  const checkAudio = () => {
+    const audioEl = document.querySelector('#musesPlayerContainer audio');
+    if (audioEl) {
+      const restartStream = () => {
+        setTimeout(() => {
+          audioEl.load();
+          audioEl.play().catch(e => console.error('Errore riavvio stream:', e));
+        }, 1000); // riavvio dopo 1 secondo
+      };
+      audioEl.onerror = restartStream;
+      audioEl.onended = restartStream;
+    } else {
+      setTimeout(checkAudio, 500); // riprova finché audio non è pronto
+    }
+  };
+  checkAudio();
 });
 </script>
 </div>
