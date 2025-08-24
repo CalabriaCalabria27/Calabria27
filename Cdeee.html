@@ -102,10 +102,10 @@
     100% { transform: translateX(-100%); }
   }
 
-  /* Contenitore player Muses */
+  /* Contenitore player Muses subito sotto il testo scorrevole */
   #musesPlayerContainer {
     position: fixed;
-    bottom: 10px;
+    top: calc(50% + 190px); /* 140px testo + 36px altezza testo + 14px margine */
     left: 50%;
     transform: translateX(-50%);
     z-index: 10000;
@@ -179,7 +179,7 @@
 </script>
 <!-- END: Quadrato centrale grande con copertina e bordo rosso-bianco -->
 
-<!-- START: MUSES RADIO PLAYER VISIBILE -->
+<!-- START: MUSES RADIO PLAYER -->
 <div id="musesPlayerContainer">
 <script type="text/javascript" src="https://hosted.muses.org/mrp.js"></script>
 <script type="text/javascript">
